@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Documents;
 
-namespace Juick.Common
-{
+namespace Juick.Client.Common {
     /// <summary>
     /// Wrapper for <see cref="RichTextBlock"/> that creates as many additional overflow
     /// columns as needed to fit the available content.
@@ -37,8 +32,7 @@ namespace Juick.Common
     /// space allows for all needed columns to be created.  When used in a vertically scrolling
     /// space there will never be any additional columns.</remarks>
     [Windows.UI.Xaml.Markup.ContentProperty(Name = "RichTextContent")]
-    public sealed class RichTextColumns : Panel
-    {
+    public sealed class RichTextColumns : Panel {
         /// <summary>
         /// Identifies the <see cref="RichTextContent"/> dependency property.
         /// </summary>
@@ -56,16 +50,14 @@ namespace Juick.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="RichTextColumns"/> class.
         /// </summary>
-        public RichTextColumns()
-        {
+        public RichTextColumns() {
             this.HorizontalAlignment = HorizontalAlignment.Left;
         }
 
         /// <summary>
         /// Gets or sets the initial rich text content to be used as the first column.
         /// </summary>
-        public RichTextBlock RichTextContent
-        {
+        public RichTextBlock RichTextContent {
             get { return (RichTextBlock)GetValue(RichTextContentProperty); }
             set { SetValue(RichTextContentProperty, value); }
         }
@@ -74,8 +66,7 @@ namespace Juick.Common
         /// Gets or sets the template used to create additional
         /// <see cref="RichTextBlockOverflow"/> instances.
         /// </summary>
-        public DataTemplate ColumnTemplate
-        {
+        public DataTemplate ColumnTemplate {
             get { return (DataTemplate)GetValue(ColumnTemplateProperty); }
             set { SetValue(ColumnTemplateProperty, value); }
         }
@@ -86,12 +77,10 @@ namespace Juick.Common
         /// <param name="d">Instance of <see cref="RichTextColumns"/> where the change
         /// occurred.</param>
         /// <param name="e">Event data describing the specific change.</param>
-        private static void ResetOverflowLayout(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
+        private static void ResetOverflowLayout(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             // When dramatic changes occur, rebuild the column layout from scratch
             var target = d as RichTextColumns;
-            if (target != null)
-            {
+            if(target != null) {
                 target._overflowColumns = null;
                 target.Children.Clear();
                 target.InvalidateMeasure();
@@ -112,15 +101,13 @@ namespace Juick.Common
         /// <param name="availableSize">The size of the space available, used to constrain the
         /// number of additional columns that can be created.</param>
         /// <returns>The resulting size of the original content plus any extra columns.</returns>
-        protected override Size MeasureOverride(Size availableSize)
-        {
-            if (this.RichTextContent == null) return new Size(0, 0);
+        protected override Size MeasureOverride(Size availableSize) {
+            if(this.RichTextContent == null) return new Size(0, 0);
 
             // Make sure the RichTextBlock is a child, using the lack of
             // a list of additional columns as a sign that this hasn't been
             // done yet
-            if (this._overflowColumns == null)
-            {
+            if(this._overflowColumns == null) {
                 Children.Add(this.RichTextContent);
                 this._overflowColumns = new List<RichTextBlockOverflow>();
             }
@@ -133,26 +120,19 @@ namespace Juick.Common
 
             // Make sure there are enough overflow columns
             int overflowIndex = 0;
-            while (hasOverflow && maxWidth < availableSize.Width && this.ColumnTemplate != null)
-            {
+            while(hasOverflow && maxWidth < availableSize.Width && this.ColumnTemplate != null) {
                 // Use existing overflow columns until we run out, then create
                 // more from the supplied template
                 RichTextBlockOverflow overflow;
-                if (this._overflowColumns.Count > overflowIndex)
-                {
+                if(this._overflowColumns.Count > overflowIndex) {
                     overflow = this._overflowColumns[overflowIndex];
-                }
-                else
-                {
+                } else {
                     overflow = (RichTextBlockOverflow)this.ColumnTemplate.LoadContent();
                     this._overflowColumns.Add(overflow);
                     this.Children.Add(overflow);
-                    if (overflowIndex == 0)
-                    {
+                    if(overflowIndex == 0) {
                         this.RichTextContent.OverflowContentTarget = overflow;
-                    }
-                    else
-                    {
+                    } else {
                         this._overflowColumns[overflowIndex - 1].OverflowContentTarget = overflow;
                     }
                 }
@@ -167,18 +147,13 @@ namespace Juick.Common
 
             // Disconnect extra columns from the overflow chain, remove them from our private list
             // of columns, and remove them as children
-            if (this._overflowColumns.Count > overflowIndex)
-            {
-                if (overflowIndex == 0)
-                {
+            if(this._overflowColumns.Count > overflowIndex) {
+                if(overflowIndex == 0) {
                     this.RichTextContent.OverflowContentTarget = null;
-                }
-                else
-                {
+                } else {
                     this._overflowColumns[overflowIndex - 1].OverflowContentTarget = null;
                 }
-                while (this._overflowColumns.Count > overflowIndex)
-                {
+                while(this._overflowColumns.Count > overflowIndex) {
                     this._overflowColumns.RemoveAt(overflowIndex);
                     this.Children.RemoveAt(overflowIndex + 1);
                 }
@@ -194,12 +169,10 @@ namespace Juick.Common
         /// <param name="finalSize">Defines the size of the area the children must be arranged
         /// within.</param>
         /// <returns>The size of the area the children actually required.</returns>
-        protected override Size ArrangeOverride(Size finalSize)
-        {
+        protected override Size ArrangeOverride(Size finalSize) {
             double maxWidth = 0;
             double maxHeight = 0;
-            foreach (var child in Children)
-            {
+            foreach(var child in Children) {
                 child.Arrange(new Rect(maxWidth, 0, child.DesiredSize.Width, finalSize.Height));
                 maxWidth += child.DesiredSize.Width;
                 maxHeight = Math.Max(maxHeight, child.DesiredSize.Height);

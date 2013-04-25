@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Juick.Common
-{
+namespace Juick.Client.Common {
     /// <summary>
     /// SuspensionManager captures global session state to simplify process lifetime management
     /// for an application.  Note that session state will be automatically cleared under a variety
@@ -20,8 +16,7 @@ namespace Juick.Common
     /// carry across sessions, but that should be discarded when an application crashes or is
     /// upgraded.
     /// </summary>
-    internal sealed class SuspensionManager
-    {
+    internal sealed class SuspensionManager {
         private static Dictionary<string, object> _sessionState = new Dictionary<string, object>();
         private static List<Type> _knownTypes = new List<Type>();
         private const string sessionStateFilename = "_sessionState.xml";
@@ -33,8 +28,7 @@ namespace Juick.Common
         /// <see cref="DataContractSerializer"/> and should be as compact as possible.  Strings
         /// and other self-contained data types are strongly recommended.
         /// </summary>
-        public static Dictionary<string, object> SessionState
-        {
+        public static Dictionary<string, object> SessionState {
             get { return _sessionState; }
         }
 
@@ -43,8 +37,7 @@ namespace Juick.Common
         /// reading and writing session state.  Initially empty, additional types may be
         /// added to customize the serialization process.
         /// </summary>
-        public static List<Type> KnownTypes
-        {
+        public static List<Type> KnownTypes {
             get { return _knownTypes; }
         }
 
@@ -55,37 +48,30 @@ namespace Juick.Common
         /// to save its state.
         /// </summary>
         /// <returns>An asynchronous task that reflects when session state has been saved.</returns>
-        public static async Task SaveAsync()
-        {
-            try
-            {
-            // Save the navigation state for all registered frames
-            foreach (var weakFrameReference in _registeredFrames)
-            {
-                Frame frame;
-                if (weakFrameReference.TryGetTarget(out frame))
-                {
-                    SaveFrameNavigationState(frame);
+        public static async Task SaveAsync() {
+            try {
+                // Save the navigation state for all registered frames
+                foreach(var weakFrameReference in _registeredFrames) {
+                    Frame frame;
+                    if(weakFrameReference.TryGetTarget(out frame)) {
+                        SaveFrameNavigationState(frame);
+                    }
                 }
-            }
 
-            // Serialize the session state synchronously to avoid asynchronous access to shared
-            // state
-            MemoryStream sessionData = new MemoryStream();
-            DataContractSerializer serializer = new DataContractSerializer(typeof(Dictionary<string, object>), _knownTypes);
-            serializer.WriteObject(sessionData, _sessionState);
-            
+                // Serialize the session state synchronously to avoid asynchronous access to shared
+                // state
+                MemoryStream sessionData = new MemoryStream();
+                DataContractSerializer serializer = new DataContractSerializer(typeof(Dictionary<string, object>), _knownTypes);
+                serializer.WriteObject(sessionData, _sessionState);
+
                 // Get an output stream for the SessionState file and write the state asynchronously
                 StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(sessionStateFilename, CreationCollisionOption.ReplaceExisting);
-                using (Stream fileStream = await file.OpenStreamForWriteAsync())
-                {
+                using(Stream fileStream = await file.OpenStreamForWriteAsync()) {
                     sessionData.Seek(0, SeekOrigin.Begin);
                     await sessionData.CopyToAsync(fileStream);
                     await fileStream.FlushAsync();
                 }
-            }
-            catch (Exception e)
-            {
+            } catch(Exception e) {
                 throw new SuspensionManagerException(e);
             }
         }
@@ -99,34 +85,27 @@ namespace Juick.Common
         /// <returns>An asynchronous task that reflects when session state has been read.  The
         /// content of <see cref="SessionState"/> should not be relied upon until this task
         /// completes.</returns>
-        public static async Task RestoreAsync()
-        {
+        public static async Task RestoreAsync() {
             _sessionState = new Dictionary<String, Object>();
 
-            try
-            {
+            try {
                 // Get the input stream for the SessionState file
                 StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync(sessionStateFilename);
-                using (IInputStream inStream = await file.OpenSequentialReadAsync())
-                {
+                using(IInputStream inStream = await file.OpenSequentialReadAsync()) {
                     // Deserialize the Session State
                     DataContractSerializer serializer = new DataContractSerializer(typeof(Dictionary<string, object>), _knownTypes);
                     _sessionState = (Dictionary<string, object>)serializer.ReadObject(inStream.AsStreamForRead());
                 }
 
                 // Restore any registered frames to their saved state
-                foreach (var weakFrameReference in _registeredFrames)
-                {
+                foreach(var weakFrameReference in _registeredFrames) {
                     Frame frame;
-                    if (weakFrameReference.TryGetTarget(out frame))
-                    {
+                    if(weakFrameReference.TryGetTarget(out frame)) {
                         frame.ClearValue(FrameSessionStateProperty);
                         RestoreFrameNavigationState(frame);
                     }
                 }
-            }
-            catch (Exception e)
-            {
+            } catch(Exception e) {
                 throw new SuspensionManagerException(e);
             }
         }
@@ -149,15 +128,12 @@ namespace Juick.Common
         /// <see cref="SuspensionManager"/></param>
         /// <param name="sessionStateKey">A unique key into <see cref="SessionState"/> used to
         /// store navigation-related information.</param>
-        public static void RegisterFrame(Frame frame, String sessionStateKey)
-        {
-            if (frame.GetValue(FrameSessionStateKeyProperty) != null)
-            {
+        public static void RegisterFrame(Frame frame, String sessionStateKey) {
+            if(frame.GetValue(FrameSessionStateKeyProperty) != null) {
                 throw new InvalidOperationException("Frames can only be registered to one session state key");
             }
 
-            if (frame.GetValue(FrameSessionStateProperty) != null)
-            {
+            if(frame.GetValue(FrameSessionStateProperty) != null) {
                 throw new InvalidOperationException("Frames must be either be registered before accessing frame session state, or not registered at all");
             }
 
@@ -177,13 +153,11 @@ namespace Juick.Common
         /// </summary>
         /// <param name="frame">An instance whose navigation history should no longer be
         /// managed.</param>
-        public static void UnregisterFrame(Frame frame)
-        {
+        public static void UnregisterFrame(Frame frame) {
             // Remove session state and remove the frame from the list of frames whose navigation
             // state will be saved (along with any weak references that are no longer reachable)
             SessionState.Remove((String)frame.GetValue(FrameSessionStateKeyProperty));
-            _registeredFrames.RemoveAll((weakFrameReference) =>
-            {
+            _registeredFrames.RemoveAll((weakFrameReference) => {
                 Frame testFrame;
                 return !weakFrameReference.TryGetTarget(out testFrame) || testFrame == frame;
             });
@@ -202,24 +176,18 @@ namespace Juick.Common
         /// <param name="frame">The instance for which session state is desired.</param>
         /// <returns>A collection of state subject to the same serialization mechanism as
         /// <see cref="SessionState"/>.</returns>
-        public static Dictionary<String, Object> SessionStateForFrame(Frame frame)
-        {
+        public static Dictionary<String, Object> SessionStateForFrame(Frame frame) {
             var frameState = (Dictionary<String, Object>)frame.GetValue(FrameSessionStateProperty);
 
-            if (frameState == null)
-            {
+            if(frameState == null) {
                 var frameSessionKey = (String)frame.GetValue(FrameSessionStateKeyProperty);
-                if (frameSessionKey != null)
-                {
+                if(frameSessionKey != null) {
                     // Registered frames reflect the corresponding session state
-                    if (!_sessionState.ContainsKey(frameSessionKey))
-                    {
+                    if(!_sessionState.ContainsKey(frameSessionKey)) {
                         _sessionState[frameSessionKey] = new Dictionary<String, Object>();
                     }
                     frameState = (Dictionary<String, Object>)_sessionState[frameSessionKey];
-                }
-                else
-                {
+                } else {
                     // Frames that aren't registered have transient state
                     frameState = new Dictionary<String, Object>();
                 }
@@ -228,30 +196,25 @@ namespace Juick.Common
             return frameState;
         }
 
-        private static void RestoreFrameNavigationState(Frame frame)
-        {
+        private static void RestoreFrameNavigationState(Frame frame) {
             var frameState = SessionStateForFrame(frame);
-            if (frameState.ContainsKey("Navigation"))
-            {
+            if(frameState.ContainsKey("Navigation")) {
                 frame.SetNavigationState((String)frameState["Navigation"]);
             }
         }
 
-        private static void SaveFrameNavigationState(Frame frame)
-        {
+        private static void SaveFrameNavigationState(Frame frame) {
             var frameState = SessionStateForFrame(frame);
             frameState["Navigation"] = frame.GetNavigationState();
         }
     }
-    public class SuspensionManagerException : Exception
-    {
-        public SuspensionManagerException()
-        {
+    public class SuspensionManagerException : Exception {
+        public SuspensionManagerException() {
         }
 
-        public SuspensionManagerException(Exception e) : base("SuspensionManager failed", e)
-        {
-            
+        public SuspensionManagerException(Exception e)
+            : base("SuspensionManager failed", e) {
+
         }
     }
 }
