@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
-using JuickApi.Common;
+using Juick.Api;
+using Juick.Common;
 using Newtonsoft.Json;
 
 namespace JuickApi {
@@ -16,10 +15,16 @@ namespace JuickApi {
             return new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
 
-        readonly HttpClient client = new HttpClient();
+        static void FixEscaping(Message message) {
+            message.Body = HttpEncoder.HtmlDecode(message.Body);
+        }
+
+        readonly HttpClient client;
 
         public JuickClient(NetworkCredential credential) {
-            client.BaseAddress = new Uri("http://api.juick.com", UriKind.Absolute);
+            client = new HttpClient {
+                BaseAddress = new Uri("http://api.juick.com", UriKind.Absolute)
+            };
             client.DefaultRequestHeaders.Authorization = CreateBasicAuthorizationHeader(credential);
         }
 
@@ -32,7 +37,7 @@ namespace JuickApi {
                 }
                 var content = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Message[]>(content);
-                ForEach(result, FixEscaping);
+                result.ForEach(FixEscaping);
                 return result;
             }
         }
@@ -48,17 +53,5 @@ namespace JuickApi {
         }
 
         #endregion
-
-        static void ForEach<T>(IEnumerable<T> enumerable, Action<T> action) {
-            foreach(T item in enumerable) {
-                action(item);
-            }
-        }
-
-        static void FixEscaping(Message message) {
-            if(message.Body.Contains("&quot;")) {
-            }
-            message.Body = HttpEncoder.HtmlDecode(message.Body);
-        }
     }
 }

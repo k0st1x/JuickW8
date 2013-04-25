@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JuickApi {
+namespace Juick.Api {
     public class Message {
         public int MId { get; set; }
         public User User { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace JuickApi {
+namespace Juick.Api {
     public interface IJuickClient {
         Task<Message[]> GetFeed();
         Task<Message[]> GetLast();
