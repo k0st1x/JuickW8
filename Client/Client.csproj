@@ -103,7 +103,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\JuickApi\Api.csproj">
+    <ProjectReference Include="..\Api\Api.csproj">
       <Project>{59459d05-8d48-4d87-aabd-7d01e4e32cec}</Project>
       <Name>Api</Name>
     </ProjectReference>
