@@ -9,7 +9,7 @@ using Juick.Common;
 using Newtonsoft.Json;
 
 namespace JuickApi {
-    public class JuickClient : IJuickClient {
+    public sealed class JuickClient : IJuickClient, IDisposable {
         static AuthenticationHeaderValue CreateBasicAuthorizationHeader(NetworkCredential credential) {
             var byteArray = Encoding.UTF8.GetBytes(credential.UserName + ":" + credential.Password);
             return new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
@@ -21,14 +21,23 @@ namespace JuickApi {
 
         readonly HttpClient client;
 
-        public JuickClient(NetworkCredential credential) {
+        public JuickClient() {
             client = new HttpClient {
                 BaseAddress = new Uri("http://api.juick.com", UriKind.Absolute)
             };
-            client.DefaultRequestHeaders.Authorization = CreateBasicAuthorizationHeader(credential);
         }
 
         #region IJuickClient Members
+
+        public void SetCredential(NetworkCredential credential) {
+            client.DefaultRequestHeaders.Authorization = CreateBasicAuthorizationHeader(credential);
+        }
+
+        public async Task<HttpStatusCode> CheckStatusCode() {
+            using(var post = await client.PostAsync("post", new ByteArrayContent(new byte[0]))) {
+                return post.StatusCode;
+            }
+        }
 
         public async Task<Message[]> GetFeed() {
             using(var response = await client.GetAsync("home?1=1")) {
@@ -50,6 +59,14 @@ namespace JuickApi {
         public async Task<Message[]> GetTop() {
             var content = await client.GetStringAsync("messages?1=1&popular=1");
             return null;
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose() {
+            client.Dispose();
         }
 
         #endregion

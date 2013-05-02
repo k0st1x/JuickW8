@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using Windows.UI.Xaml.Data;
 
@@ -35,6 +36,12 @@ namespace Juick.Client.Common
             storage = value;
             this.OnPropertyChanged(propertyName);
             return true;
+        }
+
+        protected void OnPropertyChanged(Expression<Func<object>> propertyExpression) {
+            var unaryExpression = (UnaryExpression)propertyExpression.Body;
+            var operand = (MemberExpression)unaryExpression.Operand;
+            OnPropertyChanged(operand.Member.Name);
         }
 
         /// <summary>
