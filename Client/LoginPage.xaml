@@ -1,19 +1,15 @@
-﻿<Page
+﻿<common:LayoutAwarePage
     x:Class="Juick.Client.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="using:Juick.Client.Common"
     xmlns:local="using:Juick.Client"
     xmlns:converters="using:Juick.Client.UI.Converters"
-    xmlns:vm="using:Juick.Client.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-    <Page.DataContext>
-        <vm:LoginViewModel/>
-    </Page.DataContext>
-
-    <Page.Resources>
+    <common:LayoutAwarePage.Resources>
         <Style x:Key="label" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Right" />
@@ -26,11 +22,11 @@
         <converters:NotConverter x:Key="notConverter"/>
         <converters:HttpStatusCodeToVisibilityConverter x:Key="httpStatusCodeToVisibilityConverter"/>
         <converters:HttpStatusCodeToMessageConverter x:Key="httpStatusCodeToMessageConverter"/>
-    </Page.Resources>
+    </common:LayoutAwarePage.Resources>
 
-    <Page.IsEnabled>
+    <common:LayoutAwarePage.IsEnabled>
         <Binding Path="IsLoading" Converter="{StaticResource notConverter}"/>
-    </Page.IsEnabled>
+    </common:LayoutAwarePage.IsEnabled>
     
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
@@ -57,4 +53,5 @@
             <TextBlock Text="{Binding HttpStatusCode, Converter={StaticResource httpStatusCodeToMessageConverter}}" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
     </Grid>
-</Page>
+</common:LayoutAwarePage>
+    

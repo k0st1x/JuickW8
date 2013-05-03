@@ -34,6 +34,13 @@ namespace Juick.Client.Common {
     /// </summary>
     [Windows.Foundation.Metadata.WebHostHidden]
     public class LayoutAwarePage : Page {
+        protected static IServiceProvider ServiceProvider { get; private set; }
+
+        static LayoutAwarePage() {
+            var currentApplication = (App)Application.Current;
+            ServiceProvider = currentApplication.ServiceProvider;
+        }
+
         /// <summary>
         /// Identifies the <see cref="DefaultViewModel"/> dependency property.
         /// </summary>

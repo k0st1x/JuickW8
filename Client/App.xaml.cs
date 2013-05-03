@@ -1,5 +1,7 @@
 ﻿using System;
 using Juick.Client.Common;
+using Juick.Client.Services;
+using Microsoft.Practices.Unity;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -12,11 +14,18 @@ namespace Juick.Client {
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
     sealed partial class App : Application {
+        readonly IUnityContainer container;
+
+        public IServiceProvider ServiceProvider { get; private set; }
+        
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App() {
+            container = Bootstrapper.CreateContainer();
+            ServiceProvider = container.Resolve<IServiceProvider>();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

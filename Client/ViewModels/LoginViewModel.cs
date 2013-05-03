@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Windows.Input;
+using Juick.Api;
 using Juick.Api.Extensions;
 using Juick.Client.Common;
 using Juick.Common.Windows;
-using JuickApi;
 
 namespace Juick.Client.ViewModels {
     public class LoginViewModel : BindableBase {

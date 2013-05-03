@@ -4,11 +4,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Juick.Api;
 using Juick.Common;
 using Newtonsoft.Json;
 
-namespace JuickApi {
+namespace Juick.Api {
     public sealed class JuickClient : IJuickClient, IDisposable {
         static AuthenticationHeaderValue CreateBasicAuthorizationHeader(NetworkCredential credential) {
             var byteArray = Encoding.UTF8.GetBytes(credential.UserName + ":" + credential.Password);
@@ -28,7 +27,6 @@ namespace JuickApi {
         }
 
         #region IJuickClient Members
-
         public void SetCredential(NetworkCredential credential) {
             client.DefaultRequestHeaders.Authorization = CreateBasicAuthorizationHeader(credential);
         }
@@ -60,15 +58,12 @@ namespace JuickApi {
             var content = await client.GetStringAsync("messages?1=1&popular=1");
             return null;
         }
-
         #endregion
 
         #region IDisposable Members
-
         public void Dispose() {
             client.Dispose();
         }
-
         #endregion
     }
 }
