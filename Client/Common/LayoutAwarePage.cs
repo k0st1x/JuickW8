@@ -34,11 +34,18 @@ namespace Juick.Client.Common {
     /// </summary>
     [Windows.Foundation.Metadata.WebHostHidden]
     public class LayoutAwarePage : Page {
-        protected static IServiceProvider ServiceProvider { get; private set; }
+        static IServiceProvider serviceProvider;
 
-        static LayoutAwarePage() {
-            var currentApplication = (App)Application.Current;
-            ServiceProvider = currentApplication.ServiceProvider;
+        protected static IServiceProvider ServiceProvider {
+            get {
+                if(serviceProvider == null) {
+                    var currentApplication = Application.Current as App;
+                    if(currentApplication != null) {
+                        serviceProvider = currentApplication.ServiceProvider;
+                    }
+                }
+                return serviceProvider;
+            }
         }
 
         /// <summary>
@@ -342,7 +349,9 @@ namespace Juick.Client.Common {
             var frameState = SuspensionManager.SessionStateForFrame(this.Frame);
             var pageState = new Dictionary<String, Object>();
             this.SaveState(pageState);
-            frameState[_pageKey] = pageState;
+            if(!string.IsNullOrEmpty(_pageKey)) {
+                frameState[_pageKey] = pageState;
+            }
         }
 
         /// <summary>

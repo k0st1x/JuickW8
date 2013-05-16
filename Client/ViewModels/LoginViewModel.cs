@@ -3,10 +3,13 @@ using System.Windows.Input;
 using Juick.Api;
 using Juick.Api.Extensions;
 using Juick.Client.Common;
+using Juick.Common.Services;
 using Juick.Common.Windows;
 
 namespace Juick.Client.ViewModels {
     public class LoginViewModel : BindableBase {
+        readonly ICredentialStorage credentialStorage;
+
         string login;
         string password;
         HttpStatusCode? httpStatusCode;
@@ -41,8 +44,16 @@ namespace Juick.Client.ViewModels {
 
         public ICommand LoginCommand { get; private set; }
 
-        public LoginViewModel() {
+        public LoginViewModel(ICredentialStorage credentialStorage) {
+            this.credentialStorage = credentialStorage;
+
             LoginCommand = new DelegateCommand(DoLogin);
+
+            var credential = credentialStorage.LoadCredential();
+            if(credential != null) {
+                login = credential.UserName;
+                password = credential.Password;
+            }
         }
 
         async void DoLogin() {
@@ -50,11 +61,12 @@ namespace Juick.Client.ViewModels {
             IsLoading = true;
 
             var client = new JuickClient();
-            client.SetCredential(new NetworkCredential(Login, Password));
+            client.SetCredential(new NetworkCredential(login, password));
             var code = await client.CheckStatusCode();
             HttpStatusCode = code;
             IsLoading = false;
             if(code.IsAuthenticated()) {
+                credentialStorage.SaveCredential(new NetworkCredential(login, password));
                 // redirect
             } else {
                 Password = string.Empty;
