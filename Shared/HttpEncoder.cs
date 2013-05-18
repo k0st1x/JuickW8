@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Juick.Common {
+namespace Juick.Shared {
     public static class HttpEncoder {
         static readonly IDictionary<string, char> entities = new Dictionary<string, char>(StringComparer.Ordinal) {
             { "nbsp", '\u00A0' },

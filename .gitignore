@@ -30,4 +30,4 @@ _ReSharper*/
 packages/
 !packages/repositories.config
 !.nuget/NuGet.exe
-!packages/Microsoft.Bcl.Build.1.0.4/tools/Microsoft.Bcl.Build.targets
+!packages/Microsoft.Bcl.Build.1.0.5/tools/Microsoft.Bcl.Build.targets

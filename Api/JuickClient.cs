@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Juick.Common;
+using Juick.Shared;
 using Newtonsoft.Json;
 
 namespace Juick.Api {

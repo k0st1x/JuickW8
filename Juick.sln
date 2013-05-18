@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{13D2E3E4-79AF-4FBB-A085-CBC755E64A99}"
 EndProject
@@ -12,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{53B189
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{720062DC-D289-4F4E-8229-533606F279F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +72,16 @@ Global
 		{720062DC-D289-4F4E-8229-533606F279F3}.Release|ARM.ActiveCfg = Release|Any CPU
 		{720062DC-D289-4F4E-8229-533606F279F3}.Release|x64.ActiveCfg = Release|Any CPU
 		{720062DC-D289-4F4E-8229-533606F279F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|x64.ActiveCfg = Release|Any CPU
+		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
