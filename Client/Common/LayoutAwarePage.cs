@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Juick.Client.Services;
 using Juick.Client.ViewModels;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -36,7 +37,7 @@ namespace Juick.Client.Common {
     public class LayoutAwarePage : Page {
         static IServiceProvider serviceProvider;
 
-        protected static IServiceProvider ServiceProvider {
+        static IServiceProvider ServiceProvider {
             get {
                 if(serviceProvider == null) {
                     var currentApplication = Application.Current as App;
@@ -46,6 +47,10 @@ namespace Juick.Client.Common {
                 }
                 return serviceProvider;
             }
+        }
+
+        protected void AssignViewModel<T>() {
+            DataContext = ServiceProvider.GetService<T>();
         }
 
         /// <summary>

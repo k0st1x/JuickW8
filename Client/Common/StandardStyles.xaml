@@ -565,13 +565,13 @@
         <Setter Property="AutomationProperties.AutomationId" Value="TwoPageAppBarButton"/>
         <Setter Property="AutomationProperties.Name" Value="Two Page"/>
         <Setter Property="Content" Value="&#xE11E;"/>
-    </Style>
+    </Style-->
     <Style x:Key="LeaveChatAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="LeaveChatAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Upload"/>
+        <Setter Property="AutomationProperties.Name" Value="Log Out"/>
         <Setter Property="Content" Value="&#xE11F;"/>
     </Style>
-    <Style x:Key="MailForwardAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+    <!--Style x:Key="MailForwardAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="MailForwardAppBarButton"/>
         <Setter Property="AutomationProperties.Name" Value="Forward Mail"/>
         <Setter Property="Content" Value="&#xE120;"/>

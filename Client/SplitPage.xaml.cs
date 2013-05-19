@@ -38,9 +38,9 @@ namespace Juick.Client {
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, IDictionary<String, Object> pageState) {
+        protected override void LoadState(object navigationParameter, IDictionary<string, object> pageState) {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var group = SampleDataSource.GetGroup((String)navigationParameter);
+            var group = SampleDataSource.GetGroup((string)navigationParameter);
             this.DefaultViewModel["Group"] = group;
             this.DefaultViewModel["Items"] = group.Items;
 

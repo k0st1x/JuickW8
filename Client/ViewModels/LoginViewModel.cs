@@ -4,7 +4,7 @@ using Juick.Api;
 using Juick.Api.Extensions;
 using Juick.Client.Common;
 using Juick.Common.Services;
-using Juick.Common.Windows;
+using Juick.Common.UI;
 
 namespace Juick.Client.ViewModels {
     public class LoginViewModel : BindableBase {
@@ -71,7 +71,7 @@ namespace Juick.Client.ViewModels {
             IsLoading = false;
             if(code.IsAuthenticated()) {
                 credentialStorage.SaveCredential(credential);
-                navigationManager.OpenItems();
+                navigationManager.OpenMain();
             } else {
                 Password = string.Empty;
             }

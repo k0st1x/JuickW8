@@ -28,7 +28,7 @@ namespace Juick.Client.Data {
     public abstract class SampleDataCommon : Juick.Client.Common.BindableBase {
         private static Uri _baseUri = new Uri("ms-appx:///");
 
-        public SampleDataCommon(String uniqueId, String title, String subtitle, String imagePath, String description) {
+        public SampleDataCommon(string uniqueId, string title, string subtitle, string imagePath, string description) {
             this._uniqueId = uniqueId;
             this._title = title;
             this._subtitle = subtitle;
@@ -61,7 +61,7 @@ namespace Juick.Client.Data {
         }
 
         private ImageSource _image = null;
-        private String _imagePath = null;
+        private string _imagePath = null;
         public ImageSource Image {
             get {
                 if(this._image == null && this._imagePath != null) {
@@ -91,7 +91,7 @@ namespace Juick.Client.Data {
     /// Generic item data model.
     /// </summary>
     public class SampleDataItem : SampleDataCommon {
-        public SampleDataItem(String uniqueId, String title, String subtitle, String imagePath, String description, String content, SampleDataGroup group)
+        public SampleDataItem(string uniqueId, string title, string subtitle, string imagePath, string description, string content, SampleDataGroup group)
             : base(uniqueId, title, subtitle, imagePath, description) {
             this._content = content;
             this._group = group;
@@ -114,7 +114,7 @@ namespace Juick.Client.Data {
     /// Generic group data model.
     /// </summary>
     public class SampleDataGroup : SampleDataCommon {
-        public SampleDataGroup(String uniqueId, String title, String subtitle, String imagePath, String description)
+        public SampleDataGroup(string uniqueId, string title, string subtitle, string imagePath, string description)
             : base(uniqueId, title, subtitle, imagePath, description) {
             Items.CollectionChanged += ItemsCollectionChanged;
         }
@@ -195,28 +195,26 @@ namespace Juick.Client.Data {
             get { return this._allGroups; }
         }
 
-        public static IEnumerable<SampleDataGroup> GetGroups(string uniqueId) {
-            if(!uniqueId.Equals("AllGroups")) throw new ArgumentException("Only 'AllGroups' is supported as a collection of groups");
+        //public static IEnumerable<SampleDataGroup> GetGroups(string uniqueId) {
+        //    if(!uniqueId.Equals("AllGroups")) throw new ArgumentException("Only 'AllGroups' is supported as a collection of groups");
 
-            return _sampleDataSource.AllGroups;
-        }
+        //    return _sampleDataSource.AllGroups;
+        //}
 
         public static SampleDataGroup GetGroup(string uniqueId) {
             // Simple linear search is acceptable for small data sets
-            var matches = _sampleDataSource.AllGroups.Where((group) => group.UniqueId.Equals(uniqueId));
-            if(matches.Count() == 1) return matches.First();
-            return null;
+            var matches = _sampleDataSource.AllGroups.Where(group => group.UniqueId == uniqueId);
+            return matches.FirstOrDefault();
         }
 
         public static SampleDataItem GetItem(string uniqueId) {
             // Simple linear search is acceptable for small data sets
-            var matches = _sampleDataSource.AllGroups.SelectMany(group => group.Items).Where((item) => item.UniqueId.Equals(uniqueId));
-            if(matches.Count() == 1) return matches.First();
-            return null;
+            var matches = _sampleDataSource.AllGroups.SelectMany(group => group.Items).Where(item => item.UniqueId == uniqueId);
+            return matches.FirstOrDefault();
         }
 
         public SampleDataSource() {
-            String ITEM_CONTENT = String.Format("Item Content: {0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}",
+            var ITEM_CONTENT = string.Format("Item Content: {0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}\n\n{0}",
                         "Curabitur class aliquam vestibulum nam curae maecenas sed integer cras phasellus suspendisse quisque donec dis praesent accumsan bibendum pellentesque condimentum adipiscing etiam consequat vivamus dictumst aliquam duis convallis scelerisque est parturient ullamcorper aliquet fusce suspendisse nunc hac eleifend amet blandit facilisi condimentum commodo scelerisque faucibus aenean ullamcorper ante mauris dignissim consectetuer nullam lorem vestibulum habitant conubia elementum pellentesque morbi facilisis arcu sollicitudin diam cubilia aptent vestibulum auctor eget dapibus pellentesque inceptos leo egestas interdum nulla consectetuer suspendisse adipiscing pellentesque proin lobortis sollicitudin augue elit mus congue fermentum parturient fringilla euismod feugiat");
 
             var group1 = new SampleDataGroup("Group-1",

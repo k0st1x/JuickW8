@@ -12,7 +12,7 @@ namespace Juick.Client.UI.Converters {
                 return Visibility.Collapsed;
             }
             var code = (HttpStatusCode)value;
-            return code.IsSuccess()
+            return code.IsAuthenticated()
                 ? Visibility.Collapsed
                 : Visibility.Visible;
         }

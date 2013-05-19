@@ -6,12 +6,23 @@ using Windows.UI.Xaml.Controls;
 
 namespace Juick.Client.Services {
     public class NavigationManager : INavigationManager {
-        #region INavigationManager Members
-        public void OpenItems() {
-            Navigate<ItemsPage>("AllGroups");
+        Frame frame;
+
+        Frame Frame {
+            get { return frame ?? (frame = (Frame)Window.Current.Content); }
         }
+
+        #region INavigationManager Members
+        public void OpenMain() {
+            Navigate<MainPage>();
+        }
+        
         public void OpenLogin() {
             Navigate<LoginPage>();
+        }
+
+        public void OpenRead(string uniqueId) {
+            Navigate<SplitPage>(uniqueId);
         }
         #endregion
 
@@ -24,8 +35,7 @@ namespace Juick.Client.Services {
         }
 
         async void FrameActCore(Action<Frame> action) {
-            var frame = (Frame)Window.Current.Content;
-            await frame.Dispatcher.RunAsync(CoreDispatcherPriority.High, () => action(frame));
+            await Frame.Dispatcher.RunAsync(CoreDispatcherPriority.High, () => action(Frame));
         }
     }
 }

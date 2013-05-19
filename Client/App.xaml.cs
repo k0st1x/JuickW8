@@ -67,7 +67,7 @@ namespace Juick.Client {
                 // configuring the new page by passing required information as a navigation
                 // parameter
                 //if(!rootFrame.Navigate(typeof(LoginPage))) {
-                if(!rootFrame.Navigate(typeof(ItemsPage), "AllGroups")) {
+                if(!rootFrame.Navigate(typeof(MainPage))) {
                     throw new Exception("Failed to create initial page");
                 }
             }

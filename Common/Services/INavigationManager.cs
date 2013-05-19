@@ -1,6 +1,7 @@
 ﻿namespace Juick.Common.Services {
     public interface INavigationManager {
-        void OpenItems();
+        void OpenMain();
         void OpenLogin();
+        void OpenRead(string uniqueId);
     }
 }

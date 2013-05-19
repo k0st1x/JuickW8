@@ -49,7 +49,8 @@
     <Compile Include="Services\ICredentialStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\INavigationManager.cs" />
-    <Compile Include="Windows\DelegateCommand.cs" />
+    <Compile Include="UI\DelegateCommand.cs" />
+    <Compile Include="UI\DelegateCommandOfT.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

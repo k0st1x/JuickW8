@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Juick.Common.Windows {
-    public class DelegateCommand : ICommand {
-        readonly Action action;
+namespace Juick.Common.UI {
+    public class DelegateCommand<T> : ICommand {
+        readonly Action<T> action;
 
-        public DelegateCommand(Action action) {
+        public DelegateCommand(Action<T> action) {
             this.action = action;
         }
 
@@ -20,7 +20,7 @@ namespace Juick.Common.Windows {
         }
 
         public void Execute(object parameter) {
-            action();
+            action((T)parameter);
         }
         #endregion
     }

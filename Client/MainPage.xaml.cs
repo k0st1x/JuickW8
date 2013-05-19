@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Juick.Client.Data;
+using Juick.Client.Services;
 using Juick.Client.ViewModels;
 using Windows.UI.Xaml.Controls;
 
@@ -11,10 +12,12 @@ namespace Juick.Client {
     /// A page that displays a collection of item previews.  In the Split Application this page
     /// is used to display and select one of the available groups.
     /// </summary>
-    [ViewModel("ItemsPage", typeof(ItemsViewModel))]
-    public sealed partial class ItemsPage : Juick.Client.Common.LayoutAwarePage {
-        public ItemsPage() {
+    //[ViewModel("Main", typeof(MainViewModel))]
+    public sealed partial class MainPage : Juick.Client.Common.LayoutAwarePage {
+        public MainPage() {
             this.InitializeComponent();
+            //DataContext = ServiceProvider.GetService<MainViewModel>();
+            AssignViewModel<MainViewModel>();
         }
 
         /// <summary>
@@ -26,11 +29,11 @@ namespace Juick.Client {
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, IDictionary<String, Object> pageState) {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroups = SampleDataSource.GetGroups((String)navigationParameter);
-            this.DefaultViewModel["Items"] = sampleDataGroups;
-        }
+        //protected override void LoadState(Object navigationParameter, IDictionary<String, Object> pageState) {
+        //    // TODO: Create an appropriate data model for your problem domain to replace the sample data
+        //    var sampleDataGroups = SampleDataSource.GetGroups((string)navigationParameter);
+        //    this.DefaultViewModel["Items"] = sampleDataGroups;
+        //}
 
         /// <summary>
         /// Invoked when an item is clicked.
@@ -38,11 +41,12 @@ namespace Juick.Client {
         /// <param name="sender">The GridView (or ListView when the application is snapped)
         /// displaying the item clicked.</param>
         /// <param name="e">Event data that describes the item clicked.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e) {
-            // Navigate to the appropriate destination page, configuring the new page
-            // by passing required information as a navigation parameter
-            var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(SplitPage), groupId);
-        }
+        //void ItemView_ItemClick(object sender, ItemClickEventArgs e) {
+        //    // Navigate to the appropriate destination page, configuring the new page
+        //    // by passing required information as a navigation parameter
+            
+        //    var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
+        //    this.Frame.Navigate(typeof(SplitPage), groupId);
+        //}
     }
 }

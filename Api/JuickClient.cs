@@ -66,11 +66,11 @@ namespace Juick.Api {
         
         ~JuickClient() {
             Dispose(false);
-            GC.SuppressFinalize(this);
         }
 
         public void Dispose() {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing) {
