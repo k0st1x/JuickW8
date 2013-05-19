@@ -14,7 +14,7 @@ namespace Juick.Client {
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
     sealed partial class App : Application {
-        readonly IUnityContainer container;
+        IUnityContainer container;
 
         public IServiceProvider ServiceProvider { get; private set; }
         
@@ -23,9 +23,6 @@ namespace Juick.Client {
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App() {
-            container = Bootstrapper.CreateContainer();
-            ServiceProvider = container.Resolve<IServiceProvider>();
-
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -61,12 +58,16 @@ namespace Juick.Client {
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
+            if(container == null) {
+                container = Bootstrapper.CreateContainer();
+                ServiceProvider = container.Resolve<IServiceProvider>();
+            }
             if(rootFrame.Content == null) {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if(!rootFrame.Navigate(typeof(LoginPage))) {
-                //if(!rootFrame.Navigate(typeof(ItemsPage), "AllGroups")) {
+                //if(!rootFrame.Navigate(typeof(LoginPage))) {
+                if(!rootFrame.Navigate(typeof(ItemsPage), "AllGroups")) {
                     throw new Exception("Failed to create initial page");
                 }
             }
@@ -86,7 +87,11 @@ namespace Juick.Client {
         /// <param name="e">Details about the suspend request.</param>
         private async void OnSuspending(object sender, SuspendingEventArgs e) {
             var deferral = e.SuspendingOperation.GetDeferral();
+            
             await SuspensionManager.SaveAsync();
+            container.Dispose();
+            container = null;
+            
             deferral.Complete();
         }
     }

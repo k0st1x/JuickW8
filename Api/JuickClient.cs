@@ -8,7 +8,7 @@ using Juick.Shared;
 using Newtonsoft.Json;
 
 namespace Juick.Api {
-    public sealed class JuickClient : IJuickClient, IDisposable {
+    public class JuickClient : IJuickClient, IDisposable {
         static AuthenticationHeaderValue CreateBasicAuthorizationHeader(NetworkCredential credential) {
             var byteArray = Encoding.UTF8.GetBytes(credential.UserName + ":" + credential.Password);
             return new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
@@ -28,10 +28,11 @@ namespace Juick.Api {
 
         #region IJuickClient Members
         public void SetCredential(NetworkCredential credential) {
+            Credential = credential;
             client.DefaultRequestHeaders.Authorization = CreateBasicAuthorizationHeader(credential);
         }
 
-        public async Task<HttpStatusCode> CheckStatusCode() {
+        public async virtual Task<HttpStatusCode> CheckStatusCode() {
             using(var post = await client.PostAsync("post", new ByteArrayContent(new byte[0]))) {
                 return post.StatusCode;
             }
@@ -61,9 +62,28 @@ namespace Juick.Api {
         #endregion
 
         #region IDisposable Members
+        bool disposed;
+        
+        ~JuickClient() {
+            Dispose(false);
+            GC.SuppressFinalize(this);
+        }
+
         public void Dispose() {
-            client.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing) {
+            if(disposed) {
+                return;
+            }
+            if(disposing) {
+                client.Dispose();
+            }
+            disposed = true;
         }
         #endregion
+
+        protected NetworkCredential Credential { get; private set; }
     }
 }

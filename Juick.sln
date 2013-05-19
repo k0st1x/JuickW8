@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Tests", "ClientTests\Client.Tests.csproj", "{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,30 @@ Global
 		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|ARM.ActiveCfg = Release|Any CPU
 		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|x64.ActiveCfg = Release|Any CPU
 		{CD47980F-9A7C-432C-9ED0-62E1802F1B1D}.Release|x86.ActiveCfg = Release|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|ARM.ActiveCfg = Debug|ARM
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|ARM.Build.0 = Debug|ARM
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|ARM.Deploy.0 = Debug|ARM
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|x64.ActiveCfg = Debug|x64
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|x64.Build.0 = Debug|x64
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|x64.Deploy.0 = Debug|x64
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|x86.ActiveCfg = Debug|x86
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|x86.Build.0 = Debug|x86
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Debug|x86.Deploy.0 = Debug|x86
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|ARM.ActiveCfg = Release|ARM
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|ARM.Build.0 = Release|ARM
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|ARM.Deploy.0 = Release|ARM
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|x64.ActiveCfg = Release|x64
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|x64.Build.0 = Release|x64
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|x64.Deploy.0 = Release|x64
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|x86.ActiveCfg = Release|x86
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|x86.Build.0 = Release|x86
+		{C51F85DF-41C9-409C-82EE-EDBEC19A8FDB}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

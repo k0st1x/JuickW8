@@ -2,9 +2,9 @@
 using Microsoft.Practices.Unity;
 
 namespace Juick.Client.Services {
-    public class ServiceProvider : IServiceProvider {
+    public class UnityServiceProvider : IServiceProvider {
         readonly IUnityContainer container;
-        public ServiceProvider(IUnityContainer container) {
+        public UnityServiceProvider(IUnityContainer container) {
             this.container = container;
         }
 

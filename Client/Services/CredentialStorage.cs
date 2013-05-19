@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using Juick.Common;
 using Juick.Common.Services;
 using Windows.Security.Credentials;
 

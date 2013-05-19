@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Windows.Foundation;
+using System.Reflection;
+using Juick.Client.ViewModels;
 using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI.Core;
@@ -91,6 +91,8 @@ namespace Juick.Client.Common {
                 Window.Current.CoreWindow.PointerPressed -=
                     this.CoreWindow_PointerPressed;
             };
+
+            AssignGetViewModelSafe();
         }
 
         /// <summary>
@@ -336,7 +338,7 @@ namespace Juick.Client.Common {
                 // Pass the navigation parameter and preserved page state to the page, using
                 // the same strategy for loading suspended state and recreating pages discarded
                 // from cache
-                this.LoadState(e.Parameter, (Dictionary<String, Object>)frameState[this._pageKey]);
+                this.LoadState(e.Parameter, (IDictionary<String, Object>)frameState[this._pageKey]);
             }
         }
 
@@ -363,7 +365,7 @@ namespace Juick.Client.Common {
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected virtual void LoadState(Object navigationParameter, Dictionary<String, Object> pageState) {
+        protected virtual void LoadState(Object navigationParameter, IDictionary<String, Object> pageState) {
         }
 
         /// <summary>
@@ -372,10 +374,18 @@ namespace Juick.Client.Common {
         /// requirements of <see cref="SuspensionManager.SessionState"/>.
         /// </summary>
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
-        protected virtual void SaveState(Dictionary<String, Object> pageState) {
+        protected virtual void SaveState(IDictionary<String, Object> pageState) {
         }
 
         #endregion
+
+        void AssignGetViewModelSafe() {
+            var currentType = GetType();
+            var viewModelAttribute = currentType.GetTypeInfo().GetCustomAttributes<ViewModelAttribute>().FirstOrDefault();
+            if(viewModelAttribute != null) {
+                DefaultViewModel[viewModelAttribute.Key] = ServiceProvider.GetService(viewModelAttribute.Type);
+            }
+        }
 
         /// <summary>
         /// Implementation of IObservableMap that supports reentrancy for use as a default view

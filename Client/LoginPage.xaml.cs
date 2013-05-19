@@ -1,4 +1,5 @@
-﻿using Juick.Client.Common;
+﻿using System.Collections.Generic;
+using Juick.Client.Common;
 using Juick.Client.Services;
 using Juick.Client.ViewModels;
 using Windows.UI.Xaml.Navigation;
@@ -9,10 +10,10 @@ namespace Juick.Client {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    [ViewModel("Login", typeof(LoginViewModel))]
     public sealed partial class LoginPage : LayoutAwarePage {
         public LoginPage() {
             this.InitializeComponent();
-            DataContext = ServiceProvider.GetService<LoginViewModel>();
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿<common:LayoutAwarePage
     x:Class="Juick.Client.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    DataContext="{Binding DefaultViewModel.Login, RelativeSource={RelativeSource Self}}"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="using:Juick.Client.Common"
     xmlns:local="using:Juick.Client"

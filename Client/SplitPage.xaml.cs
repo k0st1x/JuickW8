@@ -38,7 +38,7 @@ namespace Juick.Client {
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState) {
+        protected override void LoadState(Object navigationParameter, IDictionary<String, Object> pageState) {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             var group = SampleDataSource.GetGroup((String)navigationParameter);
             this.DefaultViewModel["Group"] = group;
@@ -66,7 +66,7 @@ namespace Juick.Client {
         /// requirements of <see cref="SuspensionManager.SessionState"/>.
         /// </summary>
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
-        protected override void SaveState(Dictionary<String, Object> pageState) {
+        protected override void SaveState(IDictionary<String, Object> pageState) {
             if(this.itemsViewSource.View != null) {
                 var selectedItem = (SampleDataItem)this.itemsViewSource.View.CurrentItem;
                 if(selectedItem != null) pageState["SelectedItem"] = selectedItem.UniqueId;

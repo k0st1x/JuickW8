@@ -8,7 +8,9 @@ using Juick.Common.Windows;
 
 namespace Juick.Client.ViewModels {
     public class LoginViewModel : BindableBase {
+        readonly IJuickClient client;
         readonly ICredentialStorage credentialStorage;
+        readonly INavigationManager navigationManager;
 
         string login;
         string password;
@@ -44,8 +46,10 @@ namespace Juick.Client.ViewModels {
 
         public ICommand LoginCommand { get; private set; }
 
-        public LoginViewModel(ICredentialStorage credentialStorage) {
+        public LoginViewModel(IJuickClient juickClient, ICredentialStorage credentialStorage, INavigationManager navigationManager) {
+            this.client = juickClient;
             this.credentialStorage = credentialStorage;
+            this.navigationManager = navigationManager;
 
             LoginCommand = new DelegateCommand(DoLogin);
 
@@ -60,14 +64,14 @@ namespace Juick.Client.ViewModels {
             HttpStatusCode = null;
             IsLoading = true;
 
-            var client = new JuickClient();
-            client.SetCredential(new NetworkCredential(login, password));
+            var credential = new NetworkCredential(login, password);
+            client.SetCredential(credential);
             var code = await client.CheckStatusCode();
             HttpStatusCode = code;
             IsLoading = false;
             if(code.IsAuthenticated()) {
-                credentialStorage.SaveCredential(new NetworkCredential(login, password));
-                // redirect
+                credentialStorage.SaveCredential(credential);
+                navigationManager.OpenItems();
             } else {
                 Password = string.Empty;
             }
