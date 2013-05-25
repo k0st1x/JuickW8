@@ -7,12 +7,11 @@
     xmlns:data="using:Juick.Client.Data"
     xmlns:common="using:Juick.Client.Common"
     xmlns:ui="using:Juick.Client.UI"
+    xmlns:converters="using:Juick.Client.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <!--DataContext="{Binding DefaultViewModel.Menu, RelativeSource={RelativeSource Self}}"-->
-    
     <Page.Resources>
 
         <!-- Collection of items displayed by this page -->
@@ -20,12 +19,19 @@
             x:Name="itemsViewSource"
             Source="{Binding Items}"
             d:Source="{Binding AllGroups, Source={d:DesignInstance Type=data:SampleDataSource, IsDesignTimeCreatable=True}}"/>
+        <converters:BoolToVisibilityConverter x:Name="boolToVisibilityConverter"/>
+        <converters:BoolToNotVisibilityConverter x:Name="boolToNotVisibilityConverter"/>
     </Page.Resources>
 
     <Page.BottomAppBar>
         <AppBar>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Style="{StaticResource LeaveChatAppBarButtonStyle}" Command="{Binding LogoutCommand}" />
+                <Button Style="{StaticResource LeaveChatAppBarButtonStyle}"
+                        Command="{Binding LoginCommand}"
+                        Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToNotVisibilityConverter}}"/>
+                <Button Style="{StaticResource LeaveChatAppBarButtonStyle}"
+                        Command="{Binding LogoutCommand}"
+                        Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToVisibilityConverter}}"/>
             </StackPanel>
         </AppBar>
     </Page.BottomAppBar>

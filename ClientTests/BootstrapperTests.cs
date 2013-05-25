@@ -1,9 +1,6 @@
-﻿using System.Reflection;
-using Juick.Client.Services;
-using Juick.Client.ViewModels;
+﻿using Juick.Client.ViewModels;
 using Microsoft.Practices.Unity;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Windows.UI.Xaml.Controls;
 
 namespace Juick.Client.Tests {
     [TestClass]
@@ -12,7 +9,7 @@ namespace Juick.Client.Tests {
         public void ResolveAllTest() {
             using(var container = Bootstrapper.CreateContainer()) {
                 foreach(var registration in container.Registrations) {
-                    var item = container.Resolve(registration.RegisteredType);
+                    container.Resolve(registration.RegisteredType);
                 }
             }
         }
@@ -21,6 +18,8 @@ namespace Juick.Client.Tests {
         public void LoadPagesTest() {
             using(var container = Bootstrapper.CreateContainer()) {
                 container.Resolve<LoginViewModel>();
+                container.Resolve<MainViewModel>();
+                container.Resolve<ReadThreadsViewModel>();
             }
         }
     }

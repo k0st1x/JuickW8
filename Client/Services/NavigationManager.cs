@@ -1,4 +1,6 @@
 ﻿using System;
+using Juick.Client.Data;
+using Juick.Common;
 using Juick.Common.Services;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -21,8 +23,8 @@ namespace Juick.Client.Services {
             Navigate<LoginPage>();
         }
 
-        public void OpenRead(string uniqueId) {
-            Navigate<SplitPage>(uniqueId);
+        public void OpenReadThreads(SampleDataGroup group) {
+            Navigate<ReadThreadsPage>(group);
         }
         #endregion
 

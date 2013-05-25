@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Collections.Generic;
+using Juick.Client.Common;
 using Juick.Client.Data;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
+using Juick.Client.ViewModels;
+using Juick.Common;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Split Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234234
 
@@ -22,8 +16,12 @@ namespace Juick.Client {
     /// A page that displays a group title, a list of items within the group, and details for the
     /// currently selected item.
     /// </summary>
-    public sealed partial class SplitPage : Juick.Client.Common.LayoutAwarePage {
-        public SplitPage() {
+    public sealed partial class ReadThreadsPage : Juick.Client.Common.LayoutAwarePage {
+        ReadThreadsViewModel ViewModel {
+            get { return (ReadThreadsViewModel)DataContext; }
+        }
+
+        public ReadThreadsPage() {
             this.InitializeComponent();
         }
 
@@ -39,23 +37,29 @@ namespace Juick.Client {
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(object navigationParameter, IDictionary<string, object> pageState) {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var group = SampleDataSource.GetGroup((string)navigationParameter);
-            this.DefaultViewModel["Group"] = group;
-            this.DefaultViewModel["Items"] = group.Items;
+            AssignViewModel<ReadThreadsViewModel>();
 
-            if(pageState == null) {
-                this.itemListView.SelectedItem = null;
+            object selectedItemId = null;
+            if(pageState != null) {
+                pageState.TryGetValue("SelectedItem", out selectedItemId);
+            }
+            InitializeViewModel((SampleDataGroup)navigationParameter, selectedItemId as int?);
+        }
+
+        async void InitializeViewModel(SampleDataGroup group, int? selectedItemId) {
+            await ViewModel.InitializeGroup(group);
+            if(selectedItemId == null) {
+                itemListView.SelectedItem = null;
                 // When this is a new page, select the first item automatically unless logical page
                 // navigation is being used (see the logical page navigation #region below.)
-                if(!this.UsingLogicalPageNavigation() && this.itemsViewSource.View != null) {
-                    this.itemsViewSource.View.MoveCurrentToFirst();
+                if(!UsingLogicalPageNavigation() && itemsViewSource.View != null) {
+                    itemsViewSource.View.MoveCurrentToFirst();
                 }
-            } else {
-                // Restore the previously saved state associated with this page
-                if(pageState.ContainsKey("SelectedItem") && this.itemsViewSource.View != null) {
-                    var selectedItem = SampleDataSource.GetItem((String)pageState["SelectedItem"]);
-                    this.itemsViewSource.View.MoveCurrentTo(selectedItem);
+            } else if(itemsViewSource.View != null) {
+                var mid = selectedItemId.Value;
+                var item = ViewModel.Items.FirstOrDefault(x => x.Mid == mid);
+                if(item != null) {
+                    itemsViewSource.View.MoveCurrentTo(item);
                 }
             }
         }
@@ -69,8 +73,11 @@ namespace Juick.Client {
         protected override void SaveState(IDictionary<String, Object> pageState) {
             if(this.itemsViewSource.View != null) {
                 var selectedItem = (SampleDataItem)this.itemsViewSource.View.CurrentItem;
-                if(selectedItem != null) pageState["SelectedItem"] = selectedItem.UniqueId;
+                if(selectedItem != null) {
+                    pageState["SelectedItem"] = selectedItem.Mid;
+                }
             }
+            ViewModel.SaveState();
         }
 
         #endregion

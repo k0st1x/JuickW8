@@ -96,8 +96,6 @@ namespace Juick.Client.Common {
                 Window.Current.CoreWindow.PointerPressed -=
                     this.CoreWindow_PointerPressed;
             };
-
-            AssignGetViewModelSafe();
         }
 
         /// <summary>
@@ -383,14 +381,6 @@ namespace Juick.Client.Common {
         }
 
         #endregion
-
-        void AssignGetViewModelSafe() {
-            var currentType = GetType();
-            var viewModelAttribute = currentType.GetTypeInfo().GetCustomAttributes<ViewModelAttribute>().FirstOrDefault();
-            if(viewModelAttribute != null) {
-                DefaultViewModel[viewModelAttribute.Key] = ServiceProvider.GetService(viewModelAttribute.Type);
-            }
-        }
 
         /// <summary>
         /// Implementation of IObservableMap that supports reentrancy for use as a default view

@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Juick.Api;
 using Juick.Api.Extensions;
 using Juick.Client.Common;
+using Juick.Client.Services;
 using Juick.Common.Services;
 using Juick.Common.UI;
 

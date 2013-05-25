@@ -113,6 +113,10 @@
       <Project>{720062dc-d289-4f4e-8229-533606f279f3}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{cd47980f-9a7c-432c-9ed0-62e1802f1b1d}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -126,12 +130,17 @@
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\ILocalStorageService.cs" />
+    <Compile Include="Services\IMessagesSourceService.cs" />
+    <Compile Include="Services\INavigationManager.cs" />
+    <Compile Include="Services\LocalStorageService.cs" />
+    <Compile Include="Services\MessagesSourceService.cs" />
     <Compile Include="Services\NavigationManager.cs" />
     <Compile Include="Services\ServiceProviderExtensions.cs" />
     <Compile Include="Services\SmartJuickClient.cs" />
     <Compile Include="Services\UnityServiceProvider.cs" />
-    <Compile Include="SplitPage.xaml.cs">
-      <DependentUpon>SplitPage.xaml</DependentUpon>
+    <Compile Include="ReadThreads.xaml.cs">
+      <DependentUpon>ReadThreads.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
@@ -141,6 +150,7 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="UI\Converters\BoolToNotVisibilityConverter.cs" />
     <Compile Include="UI\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="UI\Converters\HttpStatusCodeToMessageConverter.cs" />
     <Compile Include="UI\Converters\HttpStatusCodeToVisibilityConverter.cs" />
@@ -148,7 +158,7 @@
     <Compile Include="UI\ListViewBaseItemClickCommand.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelAttribute.cs" />
+    <Compile Include="ViewModels\ReadThreadsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -184,7 +194,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SplitPage.xaml">
+    <Page Include="ReadThreads.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -201,13 +211,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\win8\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Extensions, Version=2.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Net.Http.Extensions, Version=2.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Net.Http.2.1.3-beta\lib\win8\System.Net.Http.Extensions.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Net.Http.2.1.6-rc\lib\win8\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="System.Net.Http.Primitives, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Net.Http.2.1.3-beta\lib\win8\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Net.Http.2.1.6-rc\lib\win8\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
