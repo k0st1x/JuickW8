@@ -28,11 +28,11 @@ namespace Juick.Client.ViewModels {
             Items = new ObservableCollection<SampleDataGroup>(new[] {
                 new SampleDataGroup(GroupKind.MyFeed, "My Feed", "subtitle", null, "description"),
                 new SampleDataGroup(GroupKind.Private, "Private", "subtitle", null, "description"),
-                new SampleDataGroup(GroupKind.Discuss, "Discussions", "subtitle", null, "description"),
+                new SampleDataGroup(GroupKind.Discussions, "Discussions", "subtitle", null, "description"),
                 new SampleDataGroup(GroupKind.Recommended, "Recommended", "subtitle", null, "description"),
                 new SampleDataGroup(GroupKind.AllMessages, "All Messages", "subtitle", null, "description"),
                 new SampleDataGroup(GroupKind.Popular, "Popular", "subtitle", null, "description"),
-                new SampleDataGroup(GroupKind.Photos, "With photos", "subtitle", null, "description"),
+                new SampleDataGroup(GroupKind.WithMedia, "With Media", "subtitle", null, "description"),
                 //new SampleDataGroup("act:post", "Post", "subtitle", null, "description"),
             });
             LogoutCommand = new DelegateCommand(Logout);

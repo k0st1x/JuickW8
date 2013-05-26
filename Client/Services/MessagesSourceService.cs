@@ -5,6 +5,7 @@ using Juick.Api;
 using Juick.Client.Data;
 using Juick.Common;
 using Juick.Shared;
+using System;
 
 namespace Juick.Client.Services {
     public class MessagesSourceService : IMessagesSourceService {
@@ -22,9 +23,11 @@ namespace Juick.Client.Services {
             var groupKind = group.GroupKind;
             var messages = await GetGroupMessages(groupKind);
             messagesByGroupKind[groupKind] = messages;
-            messages
-                .Select(x => new SampleDataItem(x.MId, x.User.UName, x.TimeStamp.ToString(), null, TagsToSingleString(x.Tags), x.Body, group))
-                .ForEach(group.Items.Add);
+            if(messages != null) {
+                messages
+                    .Select(x => new SampleDataItem(x.MId, x.User.UName, x.TimeStamp.ToString(), null, TagsToSingleString(x.Tags), x.Body, group))
+                    .ForEach(group.Items.Add);
+            }
         }
 
         static string TagsToSingleString(string[] tags) {
@@ -43,10 +46,38 @@ namespace Juick.Client.Services {
 
         async Task<Message[]> GetGroupMessages(GroupKind groupKind) {
             try {
-                return await client.GetFeed();
+                return await GetClientGroupMessages(groupKind);
             } catch {
             }
             return await localStorageService.LoadGroup(groupKind);
+        }
+
+        Task<Message[]> GetClientGroupMessages(GroupKind groupKind) {
+            switch(groupKind) {
+                case GroupKind.None:
+                    var tcs = new TaskCompletionSource<Message[]>();
+                    tcs.SetResult(new Message[0]);
+                    return tcs.Task;
+
+                case GroupKind.MyFeed:
+                    return client.GetMyFeed();
+                case GroupKind.Private:
+                    return client.GetPrivate();
+                case GroupKind.Discussions:
+                    return client.GetDiscussions();
+                case GroupKind.Recommended:
+                    return client.GetRecommended();
+ 
+                case GroupKind.AllMessages:
+                    return client.GetAllMessages();
+                case GroupKind.Popular:
+                    return client.GetPopular();
+                case GroupKind.WithMedia:
+                    return client.GetWithMedia();
+
+                default:
+                    throw new ArgumentException("groupKind");
+            }
         }
     }
 }

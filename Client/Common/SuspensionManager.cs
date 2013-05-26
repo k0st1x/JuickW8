@@ -205,7 +205,10 @@ namespace Juick.Client.Common {
 
         private static void SaveFrameNavigationState(Frame frame) {
             var frameState = SessionStateForFrame(frame);
-            frameState["Navigation"] = frame.GetNavigationState();
+            try {
+                frameState["Navigation"] = frame.GetNavigationState();
+            } catch {
+            }
         }
     }
     public class SuspensionManagerException : Exception {

@@ -3,11 +3,10 @@
         None,
         MyFeed,
         Private,
-        Discuss,
+        Discussions,
         Recommended,
         AllMessages,
         Popular,
-        Top,
-        Photos
+        WithMedia
     }
 }

@@ -27,8 +27,8 @@ namespace Juick.Client.ViewModels {
         }
 
         public async Task InitializeGroup(SampleDataGroup group) {
-            this.group = group;
-            if(group.Items.Count == 0) {
+            Group = group;
+            if(Group.Items.Count == 0) {
                 await messagesSourceService.FillItems(group);
             }
         }

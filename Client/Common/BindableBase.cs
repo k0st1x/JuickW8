@@ -39,8 +39,12 @@ namespace Juick.Client.Common
         }
 
         protected void OnPropertyChanged(Expression<Func<object>> propertyExpression) {
-            var unaryExpression = (UnaryExpression)propertyExpression.Body;
-            var operand = (MemberExpression)unaryExpression.Operand;
+            var body = propertyExpression.Body;
+            var unaryExpression = body as UnaryExpression;
+            if(unaryExpression != null) {
+                body = unaryExpression.Operand;
+            }
+            var operand = (MemberExpression)body;
             OnPropertyChanged(operand.Member.Name);
         }
 

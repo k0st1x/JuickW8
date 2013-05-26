@@ -14,7 +14,7 @@ namespace Juick.Api {
             return new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
 
-        static void FixEscaping(Message message) {
+        static void FixEscaping(IContainsBody message) {
             message.Body = HttpEncoder.HtmlDecode(message.Body);
         }
 
@@ -38,32 +38,48 @@ namespace Juick.Api {
             }
         }
 
-        public async Task<Message[]> GetFeed() {
-            using(var response = await client.GetAsync("home?1=1")) {
-                if(!response.IsSuccessStatusCode) {
-                    return null;
-                }
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Message[]>(content);
-                result.ForEach(FixEscaping);
-                return result;
-            }
+        public Task<Message[]> GetMyFeed() {
+            return ReadMessages("home?1=1");
         }
 
-        public async Task<Message[]> GetLast() {
-            var content = await client.GetStringAsync("messages?1=1");
-            return null;
+        public Task<Message[]> GetPrivate() {
+            return ReadMessages("private?1=1"); // todo: not implemented
         }
 
-        public async Task<Message[]> GetTop() {
-            var content = await client.GetStringAsync("messages?1=1&popular=1");
-            return null;
+        public Task<Message[]> GetDiscussions() {
+            return ReadMessages("discuss?1=1"); // todo: not implemented
+        }
+
+        public Task<Message[]> GetRecommended() {
+            return ReadMessages("recommended?1=1"); // todo: not implemented
+        }
+
+        public Task<Message[]> GetAllMessages() {
+            return ReadMessages("messages?1=1");
+        }
+
+        public Task<Message[]> GetPopular() {
+            return ReadMessages("messages?1=1&popular=1");
+        }
+
+        public Task<Message[]> GetWithMedia() {
+            return ReadMessages("messages?1=1&media=all");
+        }
+
+        public Task<Comment[]> GetComments(int mid) {
+            return ReadMessages<Comment>("thread?mid=" + mid);
+        }
+
+        public Task<byte[]> GetAvatar(string uname) {
+            return ReadUri(
+                "avatar?uname=" + uname,
+                async content => content != null ? await content.ReadAsByteArrayAsync() : null);
         }
         #endregion
 
         #region IDisposable Members
         bool disposed;
-        
+
         ~JuickClient() {
             Dispose(false);
         }
@@ -85,5 +101,30 @@ namespace Juick.Api {
         #endregion
 
         protected NetworkCredential Credential { get; private set; }
+
+        async Task<T> ReadUri<T>(string url, Func<HttpContent, Task<T>> func) {
+            using(var response = await client.GetAsync(url)) {
+                return await (response.IsSuccessStatusCode
+                    ? func(response.Content)
+                    : func(null));
+            }
+        }
+
+        Task<T[]> ReadMessages<T>(string url)
+            where T : IContainsBody {
+            return ReadUri<T[]>(url, async content => {
+                if(content == null) {
+                    return null;
+                }
+                var contentString = await content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<T[]>(contentString);
+                result.ForEach(x => FixEscaping(x));
+                return result;
+            });
+        }
+
+        Task<Message[]> ReadMessages(string url) {
+            return ReadMessages<Message>(url);
+        }
     }
 }

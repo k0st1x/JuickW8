@@ -1,12 +1,10 @@
 ﻿using System;
 
 namespace Juick.Api {
-    public class Message : IContainsBody {
-        public int MId { get; set; }
+    public class Comment : IContainsBody {
+        public int CId { get; set; }
         public User User { get; set; }
         public string Body { get; set; }
-        public string[] Tags { get; set; }
         public DateTime TimeStamp { get; set; }
-        public int Replies { get; set; }
     }
 }
