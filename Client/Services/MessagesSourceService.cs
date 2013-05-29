@@ -9,6 +9,13 @@ using System;
 
 namespace Juick.Client.Services {
     public class MessagesSourceService : IMessagesSourceService {
+        static string TagsToSingleString(string[] tags) {
+            if(tags == null) {
+                return string.Empty;
+            }
+            return '*' + string.Join(" *", tags);
+        }
+
         readonly IDictionary<GroupKind, Message[]> messagesByGroupKind = new Dictionary<GroupKind, Message[]>();
         readonly IJuickClient client;
         readonly ILocalStorageService localStorageService;
@@ -25,16 +32,9 @@ namespace Juick.Client.Services {
             messagesByGroupKind[groupKind] = messages;
             if(messages != null) {
                 messages
-                    .Select(x => new SampleDataItem(x.MId, x.User.UName, x.TimeStamp.ToString(), null, TagsToSingleString(x.Tags), x.Body, group))
+                    .Select(x => CreateItem(x, group))
                     .ForEach(group.Items.Add);
             }
-        }
-
-        static string TagsToSingleString(string[] tags) {
-            if(tags == null) {
-                return string.Empty;
-            }
-            return '*' + string.Join(" *", tags);
         }
 
         public void SaveState() {
@@ -43,6 +43,24 @@ namespace Juick.Client.Services {
             }
         }
         #endregion
+
+        SampleDataItem CreateItem(Message message, SampleDataGroup group) {
+            var item = new SampleDataItem(message.MId, message.User.UName, message.TimeStamp.ToString(), client.GetAvatarUrl(message.User), TagsToSingleString(message.Tags), message.Body, group);
+            item.CommentsRequested += item_CommentsRequested;
+            return item;
+        }
+
+        async void item_CommentsRequested(object sender, EventArgs e) {
+            var item = (SampleDataItem)sender;
+            item.CommentsRequested -= item_CommentsRequested;
+            var comments = await client.GetComments(item.MId);
+            if(comments != null) {
+                foreach(var comment in comments) {
+                    var commentItem = new SampleDataCommentItem(comment.CId, comment.User.UName, comment.TimeStamp.ToString(), client.GetAvatarUrl(comment.User), comment.Body, item);
+                    item.Comments.Add(commentItem);
+                }
+            }
+        }
 
         async Task<Message[]> GetGroupMessages(GroupKind groupKind) {
             try {
@@ -61,13 +79,7 @@ namespace Juick.Client.Services {
 
                 case GroupKind.MyFeed:
                     return client.GetMyFeed();
-                case GroupKind.Private:
-                    return client.GetPrivate();
-                case GroupKind.Discussions:
-                    return client.GetDiscussions();
-                case GroupKind.Recommended:
-                    return client.GetRecommended();
- 
+
                 case GroupKind.AllMessages:
                     return client.GetAllMessages();
                 case GroupKind.Popular:

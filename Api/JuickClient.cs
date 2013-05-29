@@ -42,18 +42,6 @@ namespace Juick.Api {
             return ReadMessages("home?1=1");
         }
 
-        public Task<Message[]> GetPrivate() {
-            return ReadMessages("private?1=1"); // todo: not implemented
-        }
-
-        public Task<Message[]> GetDiscussions() {
-            return ReadMessages("discuss?1=1"); // todo: not implemented
-        }
-
-        public Task<Message[]> GetRecommended() {
-            return ReadMessages("recommended?1=1"); // todo: not implemented
-        }
-
         public Task<Message[]> GetAllMessages() {
             return ReadMessages("messages?1=1");
         }
@@ -70,10 +58,8 @@ namespace Juick.Api {
             return ReadMessages<Comment>("thread?mid=" + mid);
         }
 
-        public Task<byte[]> GetAvatar(string uname) {
-            return ReadUri(
-                "avatar?uname=" + uname,
-                async content => content != null ? await content.ReadAsByteArrayAsync() : null);
+        public string GetAvatarUrl(User user) {
+            return new Uri(client.BaseAddress, "avatar?uname=" + user.UName).ToString();
         }
         #endregion
 

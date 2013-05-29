@@ -21,8 +21,11 @@ namespace Juick.Client.Services {
         public async Task SaveGroup(GroupKind groupKind, Message[] messages) {
             var fileName = GetFileName(groupKind);
             if(messages == null) {
-                var fileToDelete = await folder.GetFileAsync(fileName);
-                await fileToDelete.DeleteAsync();
+                try {
+                    var fileToDelete = await folder.GetFileAsync(fileName);
+                    await fileToDelete.DeleteAsync();
+                } catch(FileNotFoundException) {
+                }
                 return;
             }
 

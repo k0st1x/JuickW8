@@ -57,7 +57,7 @@ namespace Juick.Client {
                 }
             } else if(itemsViewSource.View != null) {
                 var mid = selectedItemId.Value;
-                var item = ViewModel.Items.FirstOrDefault(x => x.Mid == mid);
+                var item = ViewModel.Items.FirstOrDefault(x => x.MId == mid);
                 if(item != null) {
                     itemsViewSource.View.MoveCurrentTo(item);
                 }
@@ -74,7 +74,7 @@ namespace Juick.Client {
             if(this.itemsViewSource.View != null) {
                 var selectedItem = (SampleDataItem)this.itemsViewSource.View.CurrentItem;
                 if(selectedItem != null) {
-                    pageState["SelectedItem"] = selectedItem.Mid;
+                    pageState["SelectedItem"] = selectedItem.MId;
                 }
             }
             ViewModel.SaveState();
