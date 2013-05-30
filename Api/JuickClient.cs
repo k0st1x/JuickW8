@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +15,7 @@ namespace Juick.Api {
             return new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
         }
 
-        static void FixEscaping(IContainsBody message) {
+        static void FixEscaping(MessageBase message) {
             message.Body = HttpEncoder.HtmlDecode(message.Body);
         }
 
@@ -54,8 +55,8 @@ namespace Juick.Api {
             return ReadMessages("messages?1=1&media=all");
         }
 
-        public Task<Comment[]> GetComments(int mid) {
-            return ReadMessages<Comment>("thread?mid=" + mid);
+        public Task<Reply[]> GetReplies(int mid) {
+            return ReadMessages<Reply>("thread?mid=" + mid);
         }
 
         public string GetAvatarUrl(User user) {
@@ -97,20 +98,31 @@ namespace Juick.Api {
         }
 
         Task<T[]> ReadMessages<T>(string url)
-            where T : IContainsBody {
+            where T : MessageBase {
             return ReadUri<T[]>(url, async content => {
                 if(content == null) {
                     return null;
                 }
                 var contentString = await content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<T[]>(contentString);
+                var result = JsonConvert
+                    .DeserializeObject<T[]>(contentString)
+                    .Skip(1)
+                    .ToArray();
                 result.ForEach(x => FixEscaping(x));
                 return result;
             });
         }
 
-        Task<Message[]> ReadMessages(string url) {
-            return ReadMessages<Message>(url);
+        async Task<Message[]> ReadMessages(string url) {
+            var messages = await ReadMessages<Message>(url);
+            messages.ForEach(FixTags);
+            return messages;
+        }
+
+        static void FixTags(Message message) {
+            if(message.Tags == null) {
+                message.Tags = new string[0];
+            }
         }
     }
 }

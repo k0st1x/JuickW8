@@ -41,9 +41,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comment.cs" />
+    <Compile Include="MessageBase.cs" />
+    <Compile Include="Photo.cs" />
+    <Compile Include="Reply.cs" />
     <Compile Include="Extensions\HttpStatusCodeExtensions.cs" />
-    <Compile Include="IContainsBody.cs" />
     <Compile Include="IJuickClient.cs" />
     <Compile Include="JuickClient.cs" />
     <Compile Include="Message.cs" />

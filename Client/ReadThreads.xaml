@@ -3,13 +3,12 @@
     x:Class="Juick.Client.ReadThreadsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Juick"
+    
     xmlns:data="using:Juick.Client.Data"
     xmlns:common="using:Juick.Client.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
     <Page.Resources>
 
         <!-- Collection of items displayed by this page -->
@@ -74,52 +73,32 @@
             DataContext="{Binding SelectedItem, ElementName=itemListView}"
             Style="{StaticResource VerticalScrollViewerStyle}">
 
-            <!--<Grid x:Name="itemDetailGrid" Margin="0,60,0,50">-->
-            <!--<Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>-->
-
-            <!--<Image Grid.Row="1" Margin="0,0,20,0" Width="180" Height="180" Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
-                <StackPanel x:Name="itemDetailTitlePanel" Grid.Row="1" Grid.Column="1">
-                    <TextBlock x:Name="itemTitle" Margin="0,-10,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
-                    <TextBlock x:Name="itemSubtitle" Margin="0,0,0,20" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
-                </StackPanel>
-                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="{Binding Content}" Style="{StaticResource BodyTextStyle}"/>-->
-            <!--Grid.Row="3"-->
-            <ListView x:Name="itemDetailGrid" Margin="0,60,0,50" ItemsSource="{Binding Comments}" IsSwipeEnabled="False" SelectionMode="None">
+            <ListView x:Name="itemDetailGrid"
+                      Margin="0,60,0,50"
+                      ItemsSource="{Binding Comments}"
+                      IsSwipeEnabled="False"
+                      SelectionMode="None"
+                      IsHitTestVisible="False"
+                      IsItemClickEnabled="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <!--<RowDefinition Height="Auto"/>-->
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                        <Grid Margin="6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Row="1" Margin="0,0,20,0" Width="180" Height="180" Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
-                            <!--x:Name="itemDetailTitlePanel"-->
-                            <StackPanel Grid.Row="1" Grid.Column="1">
-                                <!--x:Name="itemTitle"-->
-                                <TextBlock Margin="0,-10,0,0" Text="{Binding Title}" Style="{StaticResource SubheaderTextStyle}"/>
-                                <!--x:Name="itemSubtitle"-->
-                                <TextBlock Margin="0,0,0,20" Text="{Binding Subtitle}" Style="{StaticResource SubtitleTextStyle}"/>
+                            <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110" VerticalAlignment="Top">
+                                <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                                <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
+                                <TextBlock Text="{Binding Description}" Style="{StaticResource CaptionTextStyle}"/>
+                                <Image Source="{Binding PhotoUrl}" Margin="6"/>
                             </StackPanel>
-                            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="0,20,0,0" Text="{Binding Description}" Style="{StaticResource BodyTextStyle}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <!--</Grid>-->
         </ScrollViewer>
 
         <VisualStateManager.VisualStateGroups>

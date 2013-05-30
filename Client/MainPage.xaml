@@ -17,24 +17,23 @@
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
             x:Name="itemsViewSource"
-            Source="{Binding Items}"
-            d:Source="{Binding AllGroups, Source={d:DesignInstance Type=data:SampleDataSource, IsDesignTimeCreatable=True}}"/>
-        <converters:BoolToVisibilityConverter x:Name="boolToVisibilityConverter"/>
-        <converters:BoolToNotVisibilityConverter x:Name="boolToNotVisibilityConverter"/>
+            Source="{Binding Items}"/>
+        <!--<converters:BoolToVisibilityConverter x:Name="boolToVisibilityConverter"/>
+        <converters:BoolToNotVisibilityConverter x:Name="boolToNotVisibilityConverter"/>-->
     </Page.Resources>
 
-    <Page.BottomAppBar>
+    <!--<Page.BottomAppBar>
         <AppBar>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Style="{StaticResource LeaveChatAppBarButtonStyle}"
+                <Button Style="{StaticResource PlayAppBarButtonStyle}"
                         Command="{Binding LoginCommand}"
                         Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToNotVisibilityConverter}}"/>
-                <Button Style="{StaticResource LeaveChatAppBarButtonStyle}"
+                <Button Style="{StaticResource OutAppBarButtonStyle}"
                         Command="{Binding LogoutCommand}"
                         Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToVisibilityConverter}}"/>
             </StackPanel>
         </AppBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
     <!--
         This grid acts as a root panel for the page that defines two rows:

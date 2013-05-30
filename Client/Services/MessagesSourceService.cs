@@ -1,16 +1,16 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Juick.Api;
 using Juick.Client.Data;
 using Juick.Common;
 using Juick.Shared;
-using System;
 
 namespace Juick.Client.Services {
     public class MessagesSourceService : IMessagesSourceService {
         static string TagsToSingleString(string[] tags) {
-            if(tags == null) {
+            if(tags == null || tags.Length == 0) {
                 return string.Empty;
             }
             return '*' + string.Join(" *", tags);
@@ -45,7 +45,10 @@ namespace Juick.Client.Services {
         #endregion
 
         SampleDataItem CreateItem(Message message, SampleDataGroup group) {
-            var item = new SampleDataItem(message.MId, message.User.UName, message.TimeStamp.ToString(), client.GetAvatarUrl(message.User), TagsToSingleString(message.Tags), message.Body, group);
+            var photoUrl = message.Photo != null
+                ? message.Photo.Medium
+                : null;
+            var item = new SampleDataItem(message.MId, message.User.UName, message.TimeStamp.ToString(), client.GetAvatarUrl(message.User), message.Body, TagsToSingleString(message.Tags), photoUrl, group);
             item.CommentsRequested += item_CommentsRequested;
             return item;
         }
@@ -53,10 +56,16 @@ namespace Juick.Client.Services {
         async void item_CommentsRequested(object sender, EventArgs e) {
             var item = (SampleDataItem)sender;
             item.CommentsRequested -= item_CommentsRequested;
-            var comments = await client.GetComments(item.MId);
-            if(comments != null) {
-                foreach(var comment in comments) {
-                    var commentItem = new SampleDataCommentItem(comment.CId, comment.User.UName, comment.TimeStamp.ToString(), client.GetAvatarUrl(comment.User), comment.Body, item);
+
+            item.Comments.Add(item.ToTopReplyItem());
+
+            var replies = await client.GetReplies(item.MId);
+            if(replies != null) {
+                foreach(var reply in replies) {
+                    var photoUrl = reply.Photo != null
+                        ? reply.Photo.Medium
+                        : null;
+                    var commentItem = new SampleDataReplyItem(reply.RId, reply.User.UName, reply.TimeStamp.ToString(), client.GetAvatarUrl(reply.User), reply.Body, photoUrl, item);
                     item.Comments.Add(commentItem);
                 }
             }

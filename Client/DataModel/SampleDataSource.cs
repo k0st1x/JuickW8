@@ -22,66 +22,88 @@ namespace Juick.Client.Data {
         private static Uri _baseUri = new Uri("ms-appx:///");
 
         public SampleDataCommon(string title, string subtitle, string imagePath, string description) {
-            this._title = title;
-            this._subtitle = subtitle;
-            this._description = description;
-            this._imagePath = imagePath;
+            this.title = title;
+            this.subtitle = subtitle;
+            this.description = description;
+            this.imagePath = imagePath;
         }
 
-        private string _title = string.Empty;
+        private string title = string.Empty;
         public string Title {
-            get { return this._title; }
-            set { this.SetProperty(ref this._title, value); }
+            get { return this.title; }
+            set { this.SetProperty(ref this.title, value); }
         }
 
-        private string _subtitle = string.Empty;
+        private string subtitle = string.Empty;
         public string Subtitle {
-            get { return this._subtitle; }
-            set { this.SetProperty(ref this._subtitle, value); }
+            get { return this.subtitle; }
+            set { this.SetProperty(ref this.subtitle, value); }
         }
 
-        private string _description = string.Empty;
+        private string description = string.Empty;
         public string Description {
-            get { return this._description; }
-            set { this.SetProperty(ref this._description, value); }
+            get { return this.description; }
+            set { this.SetProperty(ref this.description, value); }
+        }
+
+        protected string ImagePath {
+            get { return imagePath; }
         }
 
         private ImageSource _image = null;
-        private string _imagePath = null;
+        private string imagePath = null;
         public ImageSource Image {
             get {
-                if(this._image == null && this._imagePath != null) {
-                    this._image = new BitmapImage(new Uri(SampleDataCommon._baseUri, this._imagePath));
+                if(this._image == null && this.imagePath != null) {
+                    this._image = new BitmapImage(new Uri(SampleDataCommon._baseUri, this.imagePath));
                 }
                 return this._image;
             }
 
             set {
-                this._imagePath = null;
+                this.imagePath = null;
                 this.SetProperty(ref this._image, value);
             }
         }
 
         public void SetImage(String path) {
             this._image = null;
-            this._imagePath = path;
-            this.OnPropertyChanged("Image");
+            this.imagePath = path;
+            this.OnPropertyChanged(() => Image);
         }
 
         public override string ToString() {
             return this.Title;
         }
+
+        //private string content = string.Empty;
+        //public string Content {
+        //    get { return this.content; }
+        //    set { this.SetProperty(ref this.content, value); }
+        //}
     }
 
     /// <summary>
     /// Generic item data model.
     /// </summary>
     public class SampleDataItem : SampleDataCommon {
-        public SampleDataItem(int mid, string title, string subtitle, string imagePath, string description, string content, SampleDataGroup group)
+        public SampleDataItem(int mid, string title, string subtitle, string imagePath, string description, string tags, string photoUrl, SampleDataGroup group)
             : base(title, subtitle, imagePath, description) {
             MId = mid;
-            this._content = content;
-            this._group = group;
+            this.group = group;
+            this.photoUrl = photoUrl;
+        }
+
+        string tags;
+        public string Tags {
+            get { return tags; }
+            set { SetProperty(ref tags, value); }
+        }
+
+        string photoUrl;
+        public string PhotoUrl {
+            get { return photoUrl; }
+            set { SetProperty(ref photoUrl, value); }
         }
 
         int mid;
@@ -90,23 +112,17 @@ namespace Juick.Client.Data {
             set { SetProperty(ref mid, value); }
         }
 
-        private string _content = string.Empty;
-        public string Content {
-            get { return this._content; }
-            set { this.SetProperty(ref this._content, value); }
-        }
-
-        private SampleDataGroup _group;
+        private SampleDataGroup group;
         public SampleDataGroup Group {
-            get { return this._group; }
-            set { this.SetProperty(ref this._group, value); }
+            get { return this.group; }
+            set { this.SetProperty(ref this.group, value); }
         }
 
-        ObservableCollection<SampleDataCommentItem> comments;
-        public ObservableCollection<SampleDataCommentItem> Comments {
+        ObservableCollection<SampleDataReplyItem> comments;
+        public ObservableCollection<SampleDataReplyItem> Comments {
             get {
                 if(comments == null) {
-                    comments = new ObservableCollection<SampleDataCommentItem>();
+                    comments = new ObservableCollection<SampleDataReplyItem>();
                     if(CommentsRequested != null) {
                         CommentsRequested(this, EventArgs.Empty);
                     }
@@ -116,14 +132,18 @@ namespace Juick.Client.Data {
         }
 
         public event EventHandler CommentsRequested;
+
+        public SampleDataReplyItem ToTopReplyItem() {
+            return new SampleDataReplyItem(MId, Title, Subtitle, ImagePath, Description, PhotoUrl, this);
+        }
     }
 
     /// <summary>
     /// Generic group data model.
     /// </summary>
     public class SampleDataGroup : SampleDataCommon {
-        public SampleDataGroup(GroupKind groupKind, string title, string subtitle, string imagePath, string description)
-            : base(title, subtitle, imagePath, description) {
+        public SampleDataGroup(GroupKind groupKind, string title, string imagePath, string description)
+            : base(title, string.Empty, imagePath, description) {
             this.groupKind = groupKind;
             Items.CollectionChanged += ItemsCollectionChanged;
         }
@@ -196,14 +216,8 @@ namespace Juick.Client.Data {
         }
     }
 
-    public class SampleDataCommentItem : SampleDataCommon {
-        public int CId { get; private set; }
-
-        string _content = string.Empty;
-        public string Content {
-            get { return this._content; }
-            set { this.SetProperty(ref _content, value); }
-        }
+    public class SampleDataReplyItem : SampleDataCommon {
+        public int Id { get; private set; }
 
         private SampleDataItem messageItem;
         public SampleDataItem MessageItem {
@@ -211,10 +225,17 @@ namespace Juick.Client.Data {
             set { this.SetProperty(ref messageItem, value); }
         }
 
-        public SampleDataCommentItem(int cid, string title, string subtitle, string imagePath, string description, SampleDataItem messageItem)
+        string photoUrl;
+        public string PhotoUrl {
+            get { return photoUrl; }
+            set { SetProperty(ref photoUrl, value); }
+        }
+
+        public SampleDataReplyItem(int id, string title, string subtitle, string imagePath, string description, string photoUrl, SampleDataItem messageItem)
             : base(title, subtitle, imagePath, description) {
-            CId = cid;
+            Id = id;
             MessageItem = messageItem;
+            this.photoUrl = photoUrl;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Juick.Api {
         Task<Message[]> GetAllMessages();
         Task<Message[]> GetPopular();
         Task<Message[]> GetWithMedia();
-        Task<Comment[]> GetComments(int mid);
+        Task<Reply[]> GetReplies(int mid);
         string GetAvatarUrl(User user);
     }
 }

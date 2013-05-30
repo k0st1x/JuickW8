@@ -4,6 +4,10 @@
         MyFeed,
         AllMessages,
         Popular,
-        WithMedia
+        WithMedia,
+
+        Login,
+        Logout,
+        Post,
     }
 }
