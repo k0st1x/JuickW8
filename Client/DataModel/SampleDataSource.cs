@@ -19,13 +19,30 @@ namespace Juick.Client.Data {
     /// </summary>
     [Windows.Foundation.Metadata.WebHostHidden]
     public abstract class SampleDataCommon : Juick.Client.Common.BindableBase {
-        protected static Uri BaseUri = new Uri("ms-appx:///");
+        static readonly Uri BaseUri = new Uri("ms-appx:///");
 
-        public SampleDataCommon(string title, string subtitle, string imagePath, string description) {
+        public SampleDataCommon(string title, string subtitle, string imagePath, string smallImagePath, string description) {
             this.title = title;
             this.subtitle = subtitle;
             this.description = description;
             this.imagePath = imagePath;
+            this.smallImagePath = smallImagePath;
+        }
+
+        string smallImagePath;
+        public string SmallImagePath {
+            get { return smallImagePath; }
+            set { SetProperty(ref smallImagePath, value); }
+        }
+
+        ImageSource smallImage;
+        public ImageSource SmallImage {
+            get {
+                if(smallImage == null && smallImagePath != null) {
+                    smallImage = new BitmapImage(new Uri(BaseUri, smallImagePath));
+                }
+                return smallImage;
+            }
         }
 
         private string title = string.Empty;
@@ -88,7 +105,7 @@ namespace Juick.Client.Data {
     /// </summary>
     public class SampleDataItem : SampleDataCommon {
         public SampleDataItem(int mid, string title, string subtitle, string imagePath, string description, string tags, string photoUrl, SampleDataGroup group)
-            : base(title, subtitle, imagePath, description) {
+            : base(title, subtitle, imagePath, imagePath, description) {
             MId = mid;
             this.group = group;
             this.photoUrl = photoUrl;
@@ -119,7 +136,7 @@ namespace Juick.Client.Data {
         }
 
         ObservableCollection<SampleDataReplyItem> comments;
-        public ObservableCollection<SampleDataReplyItem> Comments {
+        public ObservableCollection<SampleDataReplyItem> Replies {
             get {
                 if(comments == null) {
                     comments = new ObservableCollection<SampleDataReplyItem>();
@@ -143,27 +160,10 @@ namespace Juick.Client.Data {
     /// </summary>
     public class SampleDataGroup : SampleDataCommon {
         public SampleDataGroup(GroupKind groupKind, string title, string imagePath, string smallImagePath, Brush brush)
-            : base(title, string.Empty, imagePath, null) {
+            : base(title, string.Empty, imagePath, smallImagePath, null) {
             this.groupKind = groupKind;
             this.brush = brush;
-            this.smallImagePath = smallImagePath;
             Items.CollectionChanged += ItemsCollectionChanged;
-        }
-
-        string smallImagePath;
-        public string SmallImagePath {
-            get { return smallImagePath; }
-            set { SetProperty(ref smallImagePath, value); }
-        }
-
-        ImageSource smallImage;
-        public ImageSource SmallImage {
-            get {
-                if(smallImage == null && smallImagePath != null) {
-                    smallImage = new BitmapImage(new Uri(BaseUri, smallImagePath));
-                }
-                return smallImage;
-            }
         }
 
         Brush brush;
@@ -256,7 +256,7 @@ namespace Juick.Client.Data {
         }
 
         public SampleDataReplyItem(int id, string title, string subtitle, string imagePath, string description, string photoUrl, SampleDataItem messageItem)
-            : base(title, subtitle, imagePath, description) {
+            : base(title, subtitle, imagePath, imagePath, description) {
             Id = id;
             MessageItem = messageItem;
             this.photoUrl = photoUrl;

@@ -21,8 +21,9 @@
 
         <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
         <converters:NotConverter x:Key="notConverter"/>
-        <converters:HttpStatusCodeToVisibilityConverter x:Key="httpStatusCodeToVisibilityConverter"/>
-        <converters:HttpStatusCodeToMessageConverter x:Key="httpStatusCodeToMessageConverter"/>
+        <converters:StringIsNullToVisibility x:Key="stringIsNullToVisibility"/>
+        <!--<converters:HttpStatusCodeToVisibilityConverter x:Key="httpStatusCodeToVisibilityConverter"/>
+        <converters:HttpStatusCodeToMessageConverter x:Key="httpStatusCodeToMessageConverter"/>-->
     </common:LayoutAwarePage.Resources>
 
     <common:LayoutAwarePage.IsEnabled>
@@ -50,8 +51,8 @@
         <Button Content="Login" Style="{StaticResource input}" Command="{Binding LoginCommand}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" />
         <ProgressRing IsActive="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource boolToVisibilityConverter}}" Grid.Row="2" />
 
-        <Border BorderBrush="Red" BorderThickness="1" Padding="2" Grid.Row="3" Grid.ColumnSpan="2" Visibility="{Binding HttpStatusCode, Converter={StaticResource httpStatusCodeToVisibilityConverter}}">
-            <TextBlock Text="{Binding HttpStatusCode, Converter={StaticResource httpStatusCodeToMessageConverter}}" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border BorderBrush="Red" BorderThickness="1" Padding="2" Grid.Row="3" Grid.ColumnSpan="2" Visibility="{Binding Message, Converter={StaticResource stringIsNullToVisibility}}">
+            <TextBlock Text="{Binding Message}" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
     </Grid>
 </common:LayoutAwarePage>

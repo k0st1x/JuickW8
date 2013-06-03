@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Juick.Api;
 using Juick.Client.Data;
@@ -17,6 +19,7 @@ namespace Juick.Client.Services {
         }
 
         readonly IDictionary<GroupKind, Message[]> messagesByGroupKind = new Dictionary<GroupKind, Message[]>();
+        readonly IDictionary<int, Reply[]> repliesByMId = new Dictionary<int, Reply[]>();
         readonly IJuickClient client;
         readonly ILocalStorageService localStorageService;
 
@@ -28,18 +31,36 @@ namespace Juick.Client.Services {
         #region IMessagesSourceService Members
         public async Task FillItems(SampleDataGroup group) {
             var groupKind = group.GroupKind;
-            var messages = await GetGroupMessages(groupKind);
-            messagesByGroupKind[groupKind] = messages;
-            if(messages != null) {
-                messages
-                    .Select(x => CreateItem(x, group))
-                    .ForEach(group.Items.Add);
+            try {
+                var localMessages = await localStorageService.LoadGroup(groupKind);
+                group.Items.Clear();
+                foreach(var message in localMessages) {
+                    group.Items.Add(CreateItem(message, group));
+                }
+
+                var networkMessages = await GetClientGroupMessages(groupKind);
+                group.Items.Clear();
+                foreach(var message in networkMessages) {
+                    group.Items.Add(CreateItem(message, group));
+                }
+                messagesByGroupKind[groupKind] = networkMessages;
+                if(networkMessages != null) {
+                    group.Items.Clear();
+                    networkMessages
+                        .Select(x => CreateItem(x, group))
+                        .ForEach(group.Items.Add);
+                }
+            } catch {
+                // todo: show message that working offline
             }
         }
 
-        public void SaveState() {
-            foreach(var groupPair in messagesByGroupKind) {
-                localStorageService.SaveGroup(groupPair.Key, groupPair.Value);
+        public async Task SaveState() {
+            foreach(var groupPair in messagesByGroupKind.Where(x => x.Value != null)) {
+                await localStorageService.SaveGroup(groupPair.Key, groupPair.Value);
+            }
+            foreach(var replyByMId in repliesByMId) {
+                await localStorageService.SaveReplies(replyByMId.Key, replyByMId.Value);
             }
         }
         #endregion
@@ -48,7 +69,8 @@ namespace Juick.Client.Services {
             var photoUrl = message.Photo != null
                 ? message.Photo.Medium
                 : null;
-            var item = new SampleDataItem(message.MId, message.User.UName, message.TimeStamp.ToString(), client.GetAvatarUrl(message.User), message.Body, TagsToSingleString(message.Tags), photoUrl, group);
+            var userName = message.User != null ? message.User.UName : string.Empty;
+            var item = new SampleDataItem(message.MId, userName, message.TimeStamp.ToString(), client.GetAvatarUrl(message.User), message.Body, TagsToSingleString(message.Tags), photoUrl, group);
             item.CommentsRequested += item_CommentsRequested;
             return item;
         }
@@ -57,26 +79,30 @@ namespace Juick.Client.Services {
             var item = (SampleDataItem)sender;
             item.CommentsRequested -= item_CommentsRequested;
 
-            item.Comments.Add(item.ToTopReplyItem());
+            item.Replies.Add(item.ToTopReplyItem());
 
-            var replies = await client.GetReplies(item.MId);
-            if(replies != null) {
-                foreach(var reply in replies) {
-                    var photoUrl = reply.Photo != null
-                        ? reply.Photo.Medium
-                        : null;
-                    var commentItem = new SampleDataReplyItem(reply.RId, reply.User.UName, reply.TimeStamp.ToString(), client.GetAvatarUrl(reply.User), reply.Body, photoUrl, item);
-                    item.Comments.Add(commentItem);
+            var localReplies = await localStorageService.LoadReplies(item.MId);
+            if(localReplies != null) {
+                ClearTail(item.Replies);
+                foreach(var localReply in localReplies) {
+                    item.Replies.Add(CreateSampleDataReplyItem(item, localReply, null));
                 }
             }
-        }
-
-        async Task<Message[]> GetGroupMessages(GroupKind groupKind) {
             try {
-                return await GetClientGroupMessages(groupKind);
+                var replies = await client.GetReplies(item.MId);
+                if(replies != null) {
+                    ClearTail(item.Replies);
+                    foreach(var reply in replies) {
+                        var photoUrl = reply.Photo != null
+                            ? reply.Photo.Medium
+                            : null;
+                        var commentItem = CreateSampleDataReplyItem(item, reply, photoUrl);
+                        item.Replies.Add(commentItem);
+                    }
+                }
             } catch {
+                // todo: show error message
             }
-            return await localStorageService.LoadGroup(groupKind);
         }
 
         Task<Message[]> GetClientGroupMessages(GroupKind groupKind) {
@@ -100,6 +126,16 @@ namespace Juick.Client.Services {
 
                 default:
                     throw new ArgumentException("groupKind");
+            }
+        }
+
+        SampleDataReplyItem CreateSampleDataReplyItem(SampleDataItem item, Reply reply, string photoUrl) {
+            return new SampleDataReplyItem(reply.RId, reply.User.UName, reply.TimeStamp.ToString(), client.GetAvatarUrl(reply.User), reply.Body, photoUrl, item);
+        }
+
+        void ClearTail<T>(Collection<T> observableCollection) {
+            while(observableCollection.Count > 1) {
+                observableCollection.RemoveAt(1);
             }
         }
     }

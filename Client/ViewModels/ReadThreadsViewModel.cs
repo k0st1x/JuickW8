@@ -33,8 +33,8 @@ namespace Juick.Client.ViewModels {
             }
         }
 
-        public async Task SaveState() {
-            messagesSourceService.SaveState();
+        public Task SaveState() {
+            return messagesSourceService.SaveState();
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Juick.Client {
                 itemListView.SelectedItem = null;
                 // When this is a new page, select the first item automatically unless logical page
                 // navigation is being used (see the logical page navigation #region below.)
-                if(!UsingLogicalPageNavigation() && itemsViewSource.View != null) {
+                if(!UsingLogicalPageNavigation() && itemsViewSource.View != null && itemsViewSource.View.Count > 0) {
                     itemsViewSource.View.MoveCurrentToFirst();
                 }
             } else if(itemsViewSource.View != null) {

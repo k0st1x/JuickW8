@@ -150,11 +150,10 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="UI\Converters\BoolToNotVisibilityConverter.cs" />
     <Compile Include="UI\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="UI\Converters\HttpStatusCodeToMessageConverter.cs" />
     <Compile Include="UI\Converters\HttpStatusCodeToVisibilityConverter.cs" />
     <Compile Include="UI\Converters\NotConverter.cs" />
+    <Compile Include="UI\Converters\StringIsNullToVisibility.cs" />
     <Compile Include="UI\ListViewBaseItemClickCommand.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

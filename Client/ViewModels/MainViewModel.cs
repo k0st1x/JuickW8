@@ -1,6 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Windows.Input;
 using Juick.Api;
 using Juick.Api.Extensions;
@@ -9,10 +10,8 @@ using Juick.Client.Data;
 using Juick.Client.Services;
 using Juick.Common;
 using Juick.Common.UI;
-using System;
-using System.Diagnostics;
-using Windows.UI.Xaml.Media;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Juick.Client.ViewModels {
     public class MainViewModel : BindableBase {
@@ -51,8 +50,14 @@ namespace Juick.Client.ViewModels {
         }
 
         async void Initialize() {
-            var status = await client.CheckStatusCode();
-            InitializeCore(status.IsAuthenticated());
+            var isAuthenticated = false;
+            try {
+                var status = await client.CheckStatusCode();
+                isAuthenticated = status.IsAuthenticated();
+            } catch(HttpRequestException) {
+                isAuthenticated = false;
+            }
+            InitializeCore(isAuthenticated);
         }
 
         private void InitializeCore(bool initialized) {

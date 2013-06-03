@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Windows.Input;
 using Juick.Api;
 using Juick.Api.Extensions;
@@ -15,7 +16,7 @@ namespace Juick.Client.ViewModels {
 
         string login;
         string password;
-        HttpStatusCode? httpStatusCode;
+        string message;
         bool isLoading;
 
         public string Login {
@@ -28,9 +29,9 @@ namespace Juick.Client.ViewModels {
             set { SetProperty(ref password, value); }
         }
 
-        public HttpStatusCode? HttpStatusCode {
-            get { return httpStatusCode; }
-            set { SetProperty(ref httpStatusCode, value); }
+        public string Message {
+            get { return message; }
+            set { SetProperty(ref message, value); }
         }
 
         public bool IsLoading {
@@ -62,20 +63,27 @@ namespace Juick.Client.ViewModels {
         }
 
         async void DoLogin() {
-            HttpStatusCode = null;
+            Message = null;
             IsLoading = true;
 
             var credential = new NetworkCredential(login, password);
             client.SetCredential(credential);
-            var code = await client.CheckStatusCode();
-            HttpStatusCode = code;
-            IsLoading = false;
-            if(code.IsAuthenticated()) {
-                credentialStorage.SaveCredential(credential);
-                navigationManager.OpenMain();
-            } else {
-                Password = string.Empty;
+            try {
+                var code = await client.CheckStatusCode();
+
+                if(code.IsAuthenticated()) {
+                    credentialStorage.SaveCredential(credential);
+                    navigationManager.OpenMain();
+                } else {
+                    Message = string.Concat((int)code, ": ", code);
+                    Password = string.Empty;
+                }
+            } catch(HttpRequestException e) {
+                Message = e.InnerException != null
+                    ? e.InnerException.Message
+                    : e.Message;
             }
+            IsLoading = false;
         }
     }
 }

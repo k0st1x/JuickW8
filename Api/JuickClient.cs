@@ -60,6 +60,9 @@ namespace Juick.Api {
         }
 
         public string GetAvatarUrl(User user) {
+            if(user == null) {
+                return null;
+            }
             return new Uri(client.BaseAddress, "avatar?uname=" + user.UName).ToString();
         }
         #endregion
