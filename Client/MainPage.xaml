@@ -18,22 +18,7 @@
         <CollectionViewSource
             x:Name="itemsViewSource"
             Source="{Binding Items}"/>
-        <!--<converters:BoolToVisibilityConverter x:Name="boolToVisibilityConverter"/>
-        <converters:BoolToNotVisibilityConverter x:Name="boolToNotVisibilityConverter"/>-->
     </Page.Resources>
-
-    <!--<Page.BottomAppBar>
-        <AppBar>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Style="{StaticResource PlayAppBarButtonStyle}"
-                        Command="{Binding LoginCommand}"
-                        Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToNotVisibilityConverter}}"/>
-                <Button Style="{StaticResource OutAppBarButtonStyle}"
-                        Command="{Binding LogoutCommand}"
-                        Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToVisibilityConverter}}"/>
-            </StackPanel>
-        </AppBar>
-    </Page.BottomAppBar>-->
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -85,7 +70,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
+            <!--<TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>-->
+            <Image Grid.Column="1" IsHitTestVisible="false" Source="Assets/AppLogo.png" Stretch="None" HorizontalAlignment="Left"/>
         </Grid>
 
         <VisualStateManager.VisualStateGroups>
@@ -116,9 +102,9 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
+                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
+                        </ObjectAnimationUsingKeyFrames>-->
 
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>

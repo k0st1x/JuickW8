@@ -91,8 +91,10 @@ namespace Juick.Client.Services {
 
                 case GroupKind.AllMessages:
                     return client.GetAllMessages();
+
                 case GroupKind.Popular:
                     return client.GetPopular();
+
                 case GroupKind.WithMedia:
                     return client.GetWithMedia();
 

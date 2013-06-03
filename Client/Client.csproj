@@ -169,13 +169,28 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\AllMessages250.png" />
+    <Content Include="Assets\AllMessages60.png" />
+    <Content Include="Assets\AppLogo.png" />
+    <Content Include="Assets\LogIn250.png" />
+    <Content Include="Assets\LogIn60.png" />
     <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\LogOut250.png" />
+    <Content Include="Assets\LogOut60.png" />
+    <Content Include="Assets\MyFeed60.png" />
+    <Content Include="Assets\Popular60.png" />
+    <Content Include="Assets\Post60.png" />
+    <Content Include="Assets\WithMedia250.png" />
+    <Content Include="Assets\MyFeed250.png" />
+    <Content Include="Assets\Popular250.png" />
+    <Content Include="Assets\Post250.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
+    <Content Include="Assets\WithMedia60.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

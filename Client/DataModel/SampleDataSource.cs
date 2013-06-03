@@ -19,7 +19,7 @@ namespace Juick.Client.Data {
     /// </summary>
     [Windows.Foundation.Metadata.WebHostHidden]
     public abstract class SampleDataCommon : Juick.Client.Common.BindableBase {
-        private static Uri _baseUri = new Uri("ms-appx:///");
+        protected static Uri BaseUri = new Uri("ms-appx:///");
 
         public SampleDataCommon(string title, string subtitle, string imagePath, string description) {
             this.title = title;
@@ -55,7 +55,7 @@ namespace Juick.Client.Data {
         public ImageSource Image {
             get {
                 if(this._image == null && this.imagePath != null) {
-                    this._image = new BitmapImage(new Uri(SampleDataCommon._baseUri, this.imagePath));
+                    this._image = new BitmapImage(new Uri(SampleDataCommon.BaseUri, this.imagePath));
                 }
                 return this._image;
             }
@@ -142,10 +142,34 @@ namespace Juick.Client.Data {
     /// Generic group data model.
     /// </summary>
     public class SampleDataGroup : SampleDataCommon {
-        public SampleDataGroup(GroupKind groupKind, string title, string imagePath, string description)
-            : base(title, string.Empty, imagePath, description) {
+        public SampleDataGroup(GroupKind groupKind, string title, string imagePath, string smallImagePath, Brush brush)
+            : base(title, string.Empty, imagePath, null) {
             this.groupKind = groupKind;
+            this.brush = brush;
+            this.smallImagePath = smallImagePath;
             Items.CollectionChanged += ItemsCollectionChanged;
+        }
+
+        string smallImagePath;
+        public string SmallImagePath {
+            get { return smallImagePath; }
+            set { SetProperty(ref smallImagePath, value); }
+        }
+
+        ImageSource smallImage;
+        public ImageSource SmallImage {
+            get {
+                if(smallImage == null && smallImagePath != null) {
+                    smallImage = new BitmapImage(new Uri(BaseUri, smallImagePath));
+                }
+                return smallImage;
+            }
+        }
+
+        Brush brush;
+        public Brush Brush {
+            get { return brush; }
+            set { SetProperty(ref brush, value); }
         }
 
         GroupKind groupKind = GroupKind.None;

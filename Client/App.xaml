@@ -2,6 +2,7 @@
     x:Class="Juick.Client.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="using:System"
     xmlns:local="using:Juick"
     xmlns:localData="using:Juick.Data">
 
@@ -19,6 +20,7 @@
             <!-- Application-specific resources -->
 
             <x:String x:Key="AppName">Juick</x:String>
+            <!--<system:Uri x:Key="AppLogo">ms-appx:///Assets/app_logo.png</system:Uri>-->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
