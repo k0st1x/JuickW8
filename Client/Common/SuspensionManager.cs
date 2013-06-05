@@ -199,7 +199,7 @@ namespace Juick.Client.Common {
         private static void RestoreFrameNavigationState(Frame frame) {
             var frameState = SessionStateForFrame(frame);
             if(frameState.ContainsKey("Navigation")) {
-                frame.SetNavigationState((String)frameState["Navigation"]);
+                frame.SetNavigationState((string)frameState["Navigation"]);
             }
         }
 
