@@ -59,6 +59,10 @@
         <Setter Property="FontWeight" Value="SemiLight"/>
     </Style>
 
+    <!--<Style x:Key="SnappedBodyRichTextStyle" TargetType="RichTextBlock" BasedOn="{StaticResource BodyRichTextStyle}">
+        <Setter Property="FontWeight" Value="SemiLight"/>
+    </Style>-->
+
     <!-- TextBlock styles -->
 
     <Style x:Key="BasicTextStyle" TargetType="TextBlock">
@@ -1708,7 +1712,7 @@
             </Border>
             <StackPanel Grid.Column="1" Margin="10,0,0,0">
                 <TextBlock Text="{Binding Title}" Style="{StaticResource ItemTextStyle}" MaxHeight="40"/>
-                <TextBlock Text="{Binding Subtitle}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
+                <TextBlock Text="{Binding Description}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap"/>
             </StackPanel>
         </Grid>
     </DataTemplate>
@@ -1829,7 +1833,7 @@
             <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
                 <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
                 <!--<TextBlock Text="{Binding Description}" Style="{StaticResource CaptionTextStyle}"/>-->
-                
+                <RichTextBlock ui:RichTextBlockBehavior.TextContent="{Binding Description}" Style="{StaticResource BaselineRichTextStyle}"/>
                 <Image Source="{Binding PhotoUrl}" Margin="6"/>
             </StackPanel>
         </Grid>
