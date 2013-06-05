@@ -10,7 +10,8 @@
 
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:Juick.Client.UI">
 
     <!-- Non-brush values that vary across themes -->
 
@@ -1795,6 +1796,42 @@
                     </Grid>
                 </ToolTip>
             </ToolTipService.ToolTip>
+        </Grid>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="DetailRepliesItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110" VerticalAlignment="Top">
+                <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
+                <!--Style="{StaticResource CaptionTextStyle}"-->
+                <RichTextBlock ui:RichTextBlockBehavior.TextContent="{Binding Description}" Style="{StaticResource BodyRichTextStyle}"/>
+                <Image Source="{Binding PhotoUrl}" Margin="6"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DetailReplies60ItemTemplate">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="60" Height="60" VerticalAlignment="Top">
+                <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
+                <!--<TextBlock Text="{Binding Description}" Style="{StaticResource CaptionTextStyle}"/>-->
+                
+                <Image Source="{Binding PhotoUrl}" Margin="6"/>
+            </StackPanel>
         </Grid>
     </DataTemplate>
 

@@ -155,6 +155,7 @@
     <Compile Include="UI\Converters\NotConverter.cs" />
     <Compile Include="UI\Converters\StringIsNullToVisibility.cs" />
     <Compile Include="UI\ListViewBaseItemClickCommand.cs" />
+    <Compile Include="UI\RichTextBlockBehavior.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReadThreadsViewModel.cs" />

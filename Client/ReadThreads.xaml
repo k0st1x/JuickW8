@@ -64,41 +64,27 @@
             ItemTemplate="{StaticResource Standard130ItemTemplate}"/>
 
         <!-- Details for selected item -->
+        <!--VerticalScrollBarVisibility="Visible"
+            HorizontalScrollBarVisibility="Disabled"
+            IsVerticalRailEnabled="False"-->
         <ScrollViewer
             x:Name="itemDetail"
             AutomationProperties.AutomationId="ItemDetailScrollViewer"
             Grid.Column="1"
             Grid.RowSpan="2"
             Padding="70,0,120,0"
+            ZoomMode="Disabled"
             DataContext="{Binding SelectedItem, ElementName=itemListView}"
             Style="{StaticResource VerticalScrollViewerStyle}">
 
+            <!--IsHitTestVisible="False"-->
             <ListView x:Name="itemDetailGrid"
                       Margin="0,60,0,50"
+                      IsItemClickEnabled="False"
                       ItemsSource="{Binding Replies}"
-                      IsSwipeEnabled="False"
+                      IsSwipeEnabled="True"
                       SelectionMode="None"
-                      IsHitTestVisible="False"
-                      IsItemClickEnabled="False">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110" VerticalAlignment="Top">
-                                <Image Source="{Binding Image}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
-                            </Border>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                                <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
-                                <TextBlock Text="{Binding Description}" Style="{StaticResource CaptionTextStyle}"/>
-                                <Image Source="{Binding PhotoUrl}" Margin="6"/>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                      ItemTemplate="{StaticResource DetailRepliesItemTemplate}" />
         </ScrollViewer>
 
         <VisualStateManager.VisualStateGroups>
@@ -238,6 +224,9 @@
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="titlePanel" Storyboard.TargetProperty="(Grid.Column)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailGrid" Storyboard.TargetProperty="ItemTemplate">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DetailReplies60ItemTemplate}"/>
                         </ObjectAnimationUsingKeyFrames>
                         <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemDetailTitlePanel" Storyboard.TargetProperty="(Grid.Row)">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
