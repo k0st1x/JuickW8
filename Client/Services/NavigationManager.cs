@@ -23,8 +23,8 @@ namespace Juick.Client.Services {
             Navigate<LoginPage>();
         }
 
-        public void OpenReadThreads(SampleDataGroup group) {
-            Navigate<ReadThreadsPage>(group);
+        public void OpenReadThreads(GroupKind kind) {
+            Navigate<ReadThreadsPage>(kind.ToString());
         }
         #endregion
 

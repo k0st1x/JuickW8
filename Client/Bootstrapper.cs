@@ -14,6 +14,7 @@ namespace Juick.Client {
             container.RegisterType<INavigationManager, NavigationManager>(new ContainerControlledLifetimeManager());
             container.RegisterType<IMessagesSourceService, MessagesSourceService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ILocalStorageService, LocalStorageService>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IRootItemsContainer, RootItemsContainer>(new ContainerControlledLifetimeManager());
             return container;
         }
     }

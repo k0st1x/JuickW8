@@ -1,9 +1,9 @@
-﻿using Juick.Client.Data;
+﻿using Juick.Common;
 
 namespace Juick.Client.Services {
     public interface INavigationManager {
         void OpenMain();
         void OpenLogin();
-        void OpenReadThreads(SampleDataGroup group);
+        void OpenReadThreads(GroupKind kind);
     }
 }

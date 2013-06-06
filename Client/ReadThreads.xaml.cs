@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Juick.Client.Common;
 using Juick.Client.Data;
 using Juick.Client.ViewModels;
@@ -10,7 +10,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // The Split Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234234
-
 namespace Juick.Client {
     /// <summary>
     /// A page that displays a group title, a list of items within the group, and details for the
@@ -43,11 +42,12 @@ namespace Juick.Client {
             if(pageState != null) {
                 pageState.TryGetValue("SelectedItem", out selectedItemId);
             }
-            InitializeViewModel((SampleDataGroup)navigationParameter, selectedItemId as int?);
+            var kind = (GroupKind)Enum.Parse(typeof(GroupKind), (string)navigationParameter);
+            InitializeViewModel(kind, selectedItemId as int?);
         }
 
-        async void InitializeViewModel(SampleDataGroup group, int? selectedItemId) {
-            await ViewModel.InitializeGroup(group);
+        async void InitializeViewModel(GroupKind kind, int? selectedItemId) {
+            await ViewModel.InitializeGroup(kind);
             if(selectedItemId == null) {
                 itemListView.SelectedItem = null;
                 // When this is a new page, select the first item automatically unless logical page
@@ -71,13 +71,13 @@ namespace Juick.Client {
         /// </summary>
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(IDictionary<String, Object> pageState) {
-            if(this.itemsViewSource.View != null) {
-                var selectedItem = (SampleDataItem)this.itemsViewSource.View.CurrentItem;
+            ViewModel.SaveState();
+            if(itemsViewSource.View != null) {
+                var selectedItem = (SampleDataItem)itemsViewSource.View.CurrentItem;
                 if(selectedItem != null) {
                     pageState["SelectedItem"] = selectedItem.MId;
                 }
             }
-            ViewModel.SaveState();
         }
 
         #endregion

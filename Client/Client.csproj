@@ -133,9 +133,11 @@
     <Compile Include="Services\ILocalStorageService.cs" />
     <Compile Include="Services\IMessagesSourceService.cs" />
     <Compile Include="Services\INavigationManager.cs" />
+    <Compile Include="Services\IRootItemsContainer.cs" />
     <Compile Include="Services\LocalStorageService.cs" />
     <Compile Include="Services\MessagesSourceService.cs" />
     <Compile Include="Services\NavigationManager.cs" />
+    <Compile Include="Services\RootItemsContainer.cs" />
     <Compile Include="Services\ServiceProviderExtensions.cs" />
     <Compile Include="Services\SmartJuickClient.cs" />
     <Compile Include="Services\UnityServiceProvider.cs" />

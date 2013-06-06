@@ -25,6 +25,7 @@ namespace Juick.Client {
         public App() {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.Resuming += App_Resuming;
         }
 
         /// <summary>
@@ -58,10 +59,7 @@ namespace Juick.Client {
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
-            if(container == null) {
-                container = Bootstrapper.CreateContainer();
-                ServiceProvider = container.Resolve<IServiceProvider>();
-            }
+            SafeInitializeContainer();
             if(rootFrame.Content == null) {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
@@ -78,6 +76,13 @@ namespace Juick.Client {
             //var data = await client.GetFeed();
         }
 
+        private void SafeInitializeContainer() {
+            if(container == null) {
+                container = Bootstrapper.CreateContainer();
+                ServiceProvider = container.Resolve<IServiceProvider>();
+            }
+        }
+
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents
@@ -89,10 +94,14 @@ namespace Juick.Client {
             var deferral = e.SuspendingOperation.GetDeferral();
             
             await SuspensionManager.SaveAsync();
-            container.Dispose();
+            using(container) { }
             container = null;
             
             deferral.Complete();
+        }
+
+        void App_Resuming(object sender, object e) {
+            SafeInitializeContainer();
         }
     }
 }
