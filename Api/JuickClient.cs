@@ -22,7 +22,11 @@ namespace Juick.Api {
         readonly HttpClient client;
 
         public JuickClient() {
-            client = new HttpClient {
+            var clientHandle = new HttpClientHandler();
+            if(clientHandle.SupportsAutomaticDecompression) {
+                clientHandle.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            }
+            client = new HttpClient(clientHandle, true) {
                 BaseAddress = new Uri("http://api.juick.com", UriKind.Absolute)
             };
         }
