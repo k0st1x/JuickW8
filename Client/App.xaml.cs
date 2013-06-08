@@ -4,6 +4,8 @@ using Juick.Client.Services;
 using Microsoft.Practices.Unity;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.System;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -71,9 +73,13 @@ namespace Juick.Client {
             }
             // Ensure the current window is active
             Window.Current.Activate();
+            SettingsPane.GetForCurrentView().CommandsRequested += App_CommandsRequested;
+        }
 
-            //var client = new JuickApi.JuickClient(new System.Net.NetworkCredential(""));
-            //var data = await client.GetFeed();
+        void App_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args) {
+            var viewPrivacyPage = new SettingsCommand("", "Privacy Statement", cmd =>
+                Launcher.LaunchUriAsync(new Uri("http://sdrv.ms/11yqnOR", UriKind.Absolute)));
+            args.Request.ApplicationCommands.Add(viewPrivacyPage);
         }
 
         private void SafeInitializeContainer() {
