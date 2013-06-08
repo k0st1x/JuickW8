@@ -31,3 +31,4 @@ packages/
 !packages/repositories.config
 !.nuget/NuGet.exe
 !packages/Microsoft.Bcl.Build.1.0.7/tools/Microsoft.Bcl.Build.targets
+Client/AppPackages/*
