@@ -18,7 +18,7 @@ namespace Juick.Client.Services {
         });
         readonly SampleDataGroup loginGroup = new SampleDataGroup(GroupKind.Login, "Log In", "Assets/LogIn250.png", "Assets/LogIn60.png", CreatesolidColorBrush(149, 23, 161));
         readonly SampleDataGroup logoutGroup = new SampleDataGroup(GroupKind.Logout, "Log Out", "Assets/LogOut250.png", "Assets/LogOut60.png", CreatesolidColorBrush(149, 23, 161));
-        readonly SampleDataGroup postGroup = new SampleDataGroup(GroupKind.Post, "Post", "Assets/Post250.png", "Assets/Post60.png", CreatesolidColorBrush(123, 179, 255));
+        //readonly SampleDataGroup postGroup = new SampleDataGroup(GroupKind.Post, "Post", "Assets/Post250.png", "Assets/Post60.png", CreatesolidColorBrush(123, 179, 255));
 
         #region IRootItemsContainer Members
         public ObservableCollection<SampleDataGroup> Root {
@@ -31,7 +31,7 @@ namespace Juick.Client.Services {
             }
             root.Remove(loginGroup);
             root.Add(logoutGroup);
-            root.Add(postGroup);
+            //root.Add(postGroup);
         }
 
         public void LoggedOut() {
@@ -39,7 +39,7 @@ namespace Juick.Client.Services {
                 return;
             }
             root.Remove(logoutGroup);
-            root.Remove(postGroup);
+            //root.Remove(postGroup);
             root.Add(loginGroup);
         }
         #endregion
