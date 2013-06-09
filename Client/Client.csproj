@@ -12,9 +12,11 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Juick_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Client_StoreKey.pfx</PackageCertificateKeyFile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <PackageCertificateThumbprint>F9822917717385F01C4AAE62FABC186427795D12</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -166,6 +168,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Client_StoreKey.pfx" />
     <None Include="Common\ReadMe.txt" />
     <None Include="Juick_TemporaryKey.pfx" />
     <None Include="packages.config" />
@@ -182,6 +185,7 @@
     <Content Include="Assets\MyFeed60.png" />
     <Content Include="Assets\Popular60.png" />
     <Content Include="Assets\Post60.png" />
+    <Content Include="Assets\WideLogo.png" />
     <Content Include="Assets\WithMedia250.png" />
     <Content Include="Assets\MyFeed250.png" />
     <Content Include="Assets\Popular250.png" />
@@ -193,6 +197,7 @@
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
     <Content Include="Assets\WithMedia60.png" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

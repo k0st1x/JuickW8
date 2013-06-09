@@ -8,11 +8,11 @@ using Windows.Storage;
 
 namespace Juick.Client.Services {
     public class LocalStorageService : ILocalStorageService {
-        readonly StorageFolder folder = ApplicationData.Current.LocalFolder;
-
         static string GetFileName<T>(T value) {
             return value + ".xml";
         }
+
+        StorageFolder folder;
 
         #region ILocalStorageService Members
         public async Task SaveGroup(GroupKind groupKind, Message[] messages) {
@@ -37,6 +37,7 @@ namespace Juick.Client.Services {
         #endregion
 
         async Task SaveCore<T>(string fileName, T[] items) {
+            await ForceCreateFolder();
             if(items == null) {
                 try {
                     var fileToDelete = await folder.GetFileAsync(fileName);
@@ -57,6 +58,7 @@ namespace Juick.Client.Services {
         }
 
         async Task<T[]> LoadCore<T>(string fileName) {
+            await ForceCreateFolder();
             try {
                 using(var stream = await folder.OpenStreamForReadAsync(fileName)) {
                     var serializer = new DataContractSerializer(typeof(T[]));
@@ -65,6 +67,15 @@ namespace Juick.Client.Services {
             } catch {
                 return new T[0];
             }
+        }
+
+        async Task ForceCreateFolder() {
+            if(folder != null) {
+                return;
+            }
+            const string FolderName = "SavedContent";
+            var localFolder = ApplicationData.Current.LocalFolder;
+            folder = await localFolder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists);
         }
     }
 }
