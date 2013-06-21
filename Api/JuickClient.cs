@@ -59,8 +59,9 @@ namespace Juick.Api {
             return ReadMessages("messages?1=1&media=all");
         }
 
-        public Task<Reply[]> GetReplies(int mid) {
-            return ReadMessages<Reply>("thread?mid=" + mid);
+        public async Task<Reply[]> GetReplies(int mid) {
+            var replies = await ReadMessages<Reply>("thread?mid=" + mid);
+            return replies.Skip(1).ToArray();
         }
 
         public string GetAvatarUrl(User user) {
@@ -113,7 +114,6 @@ namespace Juick.Api {
                 var contentString = await content.ReadAsStringAsync();
                 var result = JsonConvert
                     .DeserializeObject<T[]>(contentString)
-                    .Skip(1)
                     .ToArray();
                 result.ForEach(x => FixEscaping(x));
                 return result;
